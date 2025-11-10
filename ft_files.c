@@ -5,7 +5,8 @@
 /*
  * Compare two entries for sorting
  * If use_time is true, sorts by modification date (newest first)
- * When dates are equal, sorts alphabetically in ascending order (like ls)
+ * Uses nanoseconds for precise comparison when seconds are equal
+ * When dates are equal (including nanoseconds), sorts alphabetically in ascending order
  * Otherwise, sorts by name (case-sensitive alphabetical order, ascending)
  * With LC_ALL=C, ls uses case-sensitive sorting
  * Returns < 0 if a < b, > 0 if a > b, 0 if equal
@@ -13,12 +14,20 @@
 static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
 {
 	int time_cmp;
+	long sec_diff;
+	long nsec_diff;
 
 	if (use_time)
 	{
-		if (a->mtime > b->mtime)
+		sec_diff = (long)a->st.st_mtimespec.tv_sec - (long)b->st.st_mtimespec.tv_sec;
+		if (sec_diff > 0)
 			return (-1);
-		if (a->mtime < b->mtime)
+		if (sec_diff < 0)
+			return (1);
+		nsec_diff = (long)a->st.st_mtimespec.tv_nsec - (long)b->st.st_mtimespec.tv_nsec;
+		if (nsec_diff > 0)
+			return (-1);
+		if (nsec_diff < 0)
 			return (1);
 		time_cmp = ft_strcmp(a->name, b->name);
 		return (time_cmp);
@@ -34,7 +43,7 @@ static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
  * Note: . and .. are sorted normally with other files (like ls)
  * Note: -r option reverses the display order, not the sort order
  */
-void	sort_entries(t_entry *entries, int count, int use_time, int use_a)
+void	sort_entries(t_entry *entries, int count, int use_time)
 {
 	int i;
 	int j;
@@ -314,7 +323,7 @@ void	list_files(const char *path, t_flags *flags)
 		free(entries);
 		return;
 	}
-	sort_entries(entries, count, flags->t, flags->a);
+	sort_entries(entries, count, flags->t);
 	display_entries(entries, count, flags, path, 1);
 	if (flags->R)
 		process_recursive_dirs(path, entries, count, flags);

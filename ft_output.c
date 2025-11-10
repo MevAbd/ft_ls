@@ -37,7 +37,7 @@ void	print_files_section(t_entry *files, int file_count, t_flags *flags)
 {
 	if (file_count <= 0)
 		return;
-	sort_entries(files, file_count, flags->t, flags->a);
+	sort_entries(files, file_count, flags->t);
 	display_entries(files, file_count, flags, ".", 0);
 }
 

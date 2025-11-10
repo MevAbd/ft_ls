@@ -57,7 +57,7 @@ void	parse_args(int argc, char **argv, t_flags *flags);
 int		count_files(const char *path, int show_hidden);
 int		collect_entries(const char *path, t_entry *entries, int count,
 			int show_hidden);
-void	sort_entries(t_entry *entries, int count, int use_time, int use_a);
+void	sort_entries(t_entry *entries, int count, int use_time);
 void	display_entries(t_entry *entries, int count, t_flags *flags,
 			const char *path, int show_total);
 void	free_entries(t_entry *entries, int count);
