@@ -2,10 +2,7 @@
 #include <errno.h>
 #include <string.h>
 
-/*
- * Print an error message for an inaccessible file/directory
- * Format: "ls: path: error message\n"
- */
+/* Print an error message for an inaccessible file/directory */
 static void	print_error(const char *path)
 {
 	const char *p1 = "ls: ";
@@ -126,10 +123,7 @@ void	classify_operands(
 	free(error_paths);
 }
 
-/*
- * Free memory allocated for operands
- * Frees file names, then the arrays
- */
+/* Free memory allocated for operands */
 void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count)
 {
 	int i;

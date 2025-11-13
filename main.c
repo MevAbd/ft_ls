@@ -17,10 +17,7 @@ static int	allocate_operands_buffers(t_entry **file_entries, char ***dir_paths,
 	return (0);
 }
 
-/*
-** Handle all operands: classify, display, and free resources
-** Returns error status (1 if errors occurred, 0 otherwise)
-*/
+/* Handle all operands: classify, display, and free resources */
 static int	handle_all_operands(int argc, char **argv, t_flags *flags)
 {
 	t_entry	*file_entries;

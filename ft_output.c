@@ -24,11 +24,7 @@ static void	sort_dir_paths(char **dirs, int dir_count)
 	}
 }
 
-/*
- * Display the files section (operands that are files)
- * Sorts files according to flags, then displays them
- * show_total = 0 because we don't display "total" for individual files
- */
+/* Display the files section (operands that are files) */
 void	print_files_section(t_entry *files, int file_count, t_flags *flags)
 {
 	if (file_count <= 0)
@@ -38,10 +34,8 @@ void	print_files_section(t_entry *files, int file_count, t_flags *flags)
 }
 
 /*
- * Display directory sections (operands that are directories)
- * Sorts directories alphabetically, then lists each one
+ * Display directory sections
  * Displays a "path:" header if multiple operands or if there are files
- * Adds line breaks between directories
  */
 void	print_dirs_sections(char **dirs, int dir_count, int had_files,
 	t_flags *flags)
