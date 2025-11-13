@@ -41,7 +41,7 @@ typedef struct s_entry
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s);
-int		ft_utoa(unsigned int n, char *buf);
+int		ft_itoa(int n, char *buf);
 
 // ============================================================================
 // PARSING AND ARGUMENT FUNCTIONS
@@ -78,7 +78,6 @@ void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count);
 // ============================================================================
 // FORMATTING FUNCTIONS
 // ============================================================================
-int		ft_itoa(int n, char *buf);
 void	format_date(time_t mtime, char *date_buf);
 void	print_total(t_entry *entries, int count);
 

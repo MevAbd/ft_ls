@@ -47,16 +47,12 @@ void	get_user_info(uid_t uid, const char **user_name)
 		*user_name = pwd->pw_name;
 	else
 	{
-		ft_utoa((unsigned int)uid, uid_buf);
+		ft_itoa((int)uid, uid_buf);
 		*user_name = uid_buf;
 	}
 }
 
-/*
- * Get group name or GID
- * Uses getgrgid to get the name, otherwise converts GID to string
- * Buffer is static to avoid scope issues
- */
+/* Get group name or GID */
 void	get_group_info(gid_t gid, const char **group_name)
 {
 	struct group	*grp;
@@ -67,7 +63,7 @@ void	get_group_info(gid_t gid, const char **group_name)
 		*group_name = grp->gr_name;
 	else
 	{
-		ft_utoa((unsigned int)gid, gid_buf);
+		ft_itoa((int)gid, gid_buf);
 		*group_name = gid_buf;
 	}
 }

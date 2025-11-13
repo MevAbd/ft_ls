@@ -1,119 +1,59 @@
 #include "ft_ls.h"
 
-/*
- * Convert an integer to a string
- * Handles negative numbers
- * Returns the length of the created string
- */
-int	ft_itoa(int n, char *buf)
+/* Format day and month part of date */
+static int	format_day_month(struct tm *tm_info, char *date_buf, char *months[])
 {
-	int len;
-	int i;
-	int neg;
-	int tmp;
+	int	day;
+	int	month_idx;
 
-	len = 0;
-	neg = (n < 0);
-	if (neg)
-		n = -n;
-	if (n == 0)
-	{
-		buf[0] = '0';
-		return (1);
-	}
-	tmp = n;
-	while (tmp > 0)
-	{
-		buf[len++] = '0' + (tmp % 10);
-		tmp /= 10;
-	}
-	i = 0;
-	while (i < len / 2)
-	{
-		char c = buf[i];
-		buf[i] = buf[len - 1 - i];
-		buf[len - 1 - i] = c;
-		i++;
-	}
-	if (neg)
-	{
-		i = len;
-		while (i > 0)
-		{
-			buf[i] = buf[i - 1];
-			i--;
-		}
-		buf[0] = '-';
-		len++;
-	}
-	buf[len] = '\0';
-	return (len);
+	day = tm_info->tm_mday;
+	month_idx = tm_info->tm_mon;
+	date_buf[0] = '0' + (day / 10);
+	date_buf[1] = '0' + (day % 10);
+	date_buf[2] = ' ';
+	date_buf[3] = months[month_idx][0];
+	date_buf[4] = months[month_idx][1];
+	date_buf[5] = months[month_idx][2];
+	date_buf[6] = ' ';
+	return (7);
 }
 
-/*
- * Format a date with year (for files > 6 months old)
- * Format: "10 déc 2023"
- */
+/* Format: "10 déc 2023" */
 static void	format_date_with_year(struct tm *tm_info, char *date_buf,
 	char *months[])
 {
-	int day;
-	int year;
-	int month_idx;
+	int	year;
+	int	offset;
 
-	day = tm_info->tm_mday;
+	offset = format_day_month(tm_info, date_buf, months);
 	year = tm_info->tm_year + 1900;
-	month_idx = tm_info->tm_mon;
-	date_buf[0] = '0' + (day / 10);
-	date_buf[1] = '0' + (day % 10);
-	date_buf[2] = ' ';
-	date_buf[3] = months[month_idx][0];
-	date_buf[4] = months[month_idx][1];
-	date_buf[5] = months[month_idx][2];
-	date_buf[6] = ' ';
-	date_buf[7] = '0' + (year / 1000);
-	date_buf[8] = '0' + ((year / 100) % 10);
-	date_buf[9] = '0' + ((year / 10) % 10);
-	date_buf[10] = '0' + (year % 10);
-	date_buf[11] = '\0';
+	date_buf[offset] = '0' + (year / 1000);
+	date_buf[offset + 1] = '0' + ((year / 100) % 10);
+	date_buf[offset + 2] = '0' + ((year / 10) % 10);
+	date_buf[offset + 3] = '0' + (year % 10);
+	date_buf[offset + 4] = '\0';
 }
 
-/*
- * Format a date with time (for files < 6 months old)
- * Format: "10 nov 15:00"
- */
+/* Format: "10 nov 15:00" */
 static void	format_date_with_time(struct tm *tm_info, char *date_buf,
 	char *months[])
 {
-	int day;
-	int hour;
-	int min;
-	int month_idx;
+	int	hour;
+	int	min;
+	int	offset;
 
-	day = tm_info->tm_mday;
+	offset = format_day_month(tm_info, date_buf, months);
 	hour = tm_info->tm_hour;
 	min = tm_info->tm_min;
-	month_idx = tm_info->tm_mon;
-	date_buf[0] = '0' + (day / 10);
-	date_buf[1] = '0' + (day % 10);
-	date_buf[2] = ' ';
-	date_buf[3] = months[month_idx][0];
-	date_buf[4] = months[month_idx][1];
-	date_buf[5] = months[month_idx][2];
-	date_buf[6] = ' ';
-	date_buf[7] = '0' + (hour / 10);
-	date_buf[8] = '0' + (hour % 10);
-	date_buf[9] = ':';
-	date_buf[10] = '0' + (min / 10);
-	date_buf[11] = '0' + (min % 10);
-	date_buf[12] = '\0';
+	date_buf[offset] = '0' + (hour / 10);
+	date_buf[offset + 1] = '0' + (hour % 10);
+	date_buf[offset + 2] = ':';
+	date_buf[offset + 3] = '0' + (min / 10);
+	date_buf[offset + 4] = '0' + (min % 10);
+	date_buf[offset + 5] = '\0';
 }
 
-/*
- * Format a modification date
- * Chooses between format with year (> 6 months) or with time (< 6 months)
- * Uses French month names (jan, fév, mar, etc.)
- */
+/* Format a modification date */
 void	format_date(time_t mtime, char *date_buf)
 {
 	time_t now;
@@ -130,9 +70,9 @@ void	format_date(time_t mtime, char *date_buf)
 }
 
 /*
- * Write a total number (for the "total" line)
- * Converts the number to string and displays it
- */
+** Write a total number (for the "total" line)
+** Converts the number to string and displays it
+*/
 static void	write_total_number(long long total)
 {
 	char total_str[32];
@@ -167,7 +107,11 @@ static void	write_total_number(long long total)
 	write(1, total_str, len);
 }
 
-/* Display the "total X" line at the start of long format */
+/*
+** Display the "total X" line at the start of long format
+** Calculates the sum of blocks (st_blocks) of all files
+** Used only for directories (show_total = 1)
+*/
 void	print_total(t_entry *entries, int count)
 {
 	long long total;

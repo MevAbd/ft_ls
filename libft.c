@@ -43,39 +43,49 @@ char			*ft_strdup(const char *s)
 	return (dup);
 }
 
-/* Convert an unsigned integer to string in a buffer */
-int				ft_utoa(unsigned int n, char *buf)
+/* Convert an integer to string in a buffer */
+int				ft_itoa(int n, char *buf)
 {
 	int		len;
 	int		i;
-	unsigned int	tmp;
+	int		neg;
+	int		tmp;
 
 	len = 0;
-	tmp = n;
-	if (tmp == 0)
+	neg = (n < 0);
+	if (neg)
+		n = -n;
+	if (n == 0)
 	{
 		buf[0] = '0';
-		len = 1;
+		return (1);
 	}
-	else
+	tmp = n;
+	while (tmp > 0)
 	{
-		i = 0;
-		while (tmp > 0)
-		{
-			buf[i++] = '0' + (tmp % 10);
-			tmp /= 10;
-		}
-		len = i;
-		i = 0;
-		while (i < len / 2)
-		{
-			char	c;
+		buf[len++] = '0' + (tmp % 10);
+		tmp /= 10;
+	}
+	i = 0;
+	while (i < len / 2)
+	{
+		char	c;
 
-			c = buf[i];
-			buf[i] = buf[len - 1 - i];
-			buf[len - 1 - i] = c;
-			i++;
+		c = buf[i];
+		buf[i] = buf[len - 1 - i];
+		buf[len - 1 - i] = c;
+		i++;
+	}
+	if (neg)
+	{
+		i = len;
+		while (i > 0)
+		{
+			buf[i] = buf[i - 1];
+			i--;
 		}
+		buf[0] = '-';
+		len++;
 	}
 	buf[len] = '\0';
 	return (len);
