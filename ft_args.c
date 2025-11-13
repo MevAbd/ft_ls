@@ -7,8 +7,8 @@ int	is_option(const char *s)
 		&& !(s[1] == '-' && s[2] == '\0'));
 }
 
-/* Returns 1 if it's "--" */
-static int	is_end_of_options(const char *s)
+/* Returns 1 if it's "--" (end of options marker) */
+int	is_end_of_options(const char *s)
 {
 	return (s && s[0] == '-' && s[1] == '-' && s[2] == '\0');
 }

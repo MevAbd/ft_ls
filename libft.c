@@ -43,13 +43,13 @@ char			*ft_strdup(const char *s)
 	return (dup);
 }
 
-/* Convert an integer to string in a buffer */
-int				ft_itoa(int n, char *buf)
+/* Convert a number to string in a buffer */
+int				ft_putnbr(long long n, char *buf)
 {
-	int		len;
-	int		i;
-	int		neg;
-	int		tmp;
+	int			len;
+	int			i;
+	int			neg;
+	long long	tmp;
 
 	len = 0;
 	neg = (n < 0);
@@ -89,4 +89,38 @@ int				ft_itoa(int n, char *buf)
 	}
 	buf[len] = '\0';
 	return (len);
+}
+
+/* Build a full path from a base directory and a name */
+char			*ft_build_full_path(const char *base, const char *name)
+{
+	size_t	base_len;
+	size_t	name_len;
+	size_t	k;
+	size_t	m;
+	int		need_slash;
+	char	*full;
+
+	base_len = ft_strlen(base);
+	name_len = ft_strlen(name);
+	need_slash = (base_len > 0 && base[base_len - 1] != '/');
+	full = (char *)malloc(base_len + need_slash + name_len + 1);
+	if (full == NULL)
+		return (NULL);
+	k = 0;
+	while (k < base_len)
+	{
+		full[k] = base[k];
+		k++;
+	}
+	if (need_slash)
+		full[k++] = '/';
+	m = 0;
+	while (m < name_len)
+	{
+		full[k + m] = name[m];
+		m++;
+	}
+	full[k + m] = '\0';
+	return (full);
 }

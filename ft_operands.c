@@ -28,50 +28,35 @@ static void	print_memory_error(void)
 	write(2, msg, ft_strlen(msg));
 }
 
-/*
- * Add a file to the files array
- * Duplicates the name and stores metadata (mtime, stat)
- * Returns 1 on success, 0 on error
- */
-static int	add_file_entry(t_entry *file_entries, int *file_count,
-	const char *path, struct stat *st)
+/* Add a path to the appropriate array (file or directory) */
+static int	add_operand_path(const char *path, t_entry *file_entries,
+	int *file_count, char **dir_paths, int *dir_count, struct stat *st)
 {
-	file_entries[*file_count].name = ft_strdup(path);
-	if (file_entries[*file_count].name == NULL)
+	char	*dup_path;
+
+	dup_path = ft_strdup(path);
+	if (dup_path == NULL)
 	{
 		print_memory_error();
 		return (0);
 	}
-	file_entries[*file_count].mtime = st->st_mtime;
-	file_entries[*file_count].st = *st;
-	(*file_count)++;
-	return (1);
-}
-
-/*
- * Add a directory to the directories array
- * Duplicates the directory path
- * Returns 1 on success, 0 on error
- */
-static int	add_dir_path(char **dir_paths, int *dir_count, const char *path)
-{
-	dir_paths[*dir_count] = ft_strdup(path);
-	if (dir_paths[*dir_count] == NULL)
+	if (st != NULL)
 	{
-		print_memory_error();
-		return (0);
+		file_entries[*file_count].name = dup_path;
+		file_entries[*file_count].mtime = st->st_mtime;
+		file_entries[*file_count].st = *st;
+		(*file_count)++;
 	}
-	(*dir_count)++;
+	else
+	{
+		dir_paths[*dir_count] = dup_path;
+		(*dir_count)++;
+	}
 	return (1);
 }
 
-/*
- * Process an operand (file or directory in arguments)
- * Does an lstat to determine type and adds it to the right array
- * If error, stores the path in error_paths array
- * Returns 1 on success, 0 on error (file doesn't exist)
- */
-static int	process_operand(const char *path, t_entry *file_entries,
+/* Check if a single path is a file or directory and add it to the appropriate array */
+static int	classify_single_operand(const char *path, t_entry *file_entries,
 	int *file_count, char **dir_paths, int *dir_count,
 	char **error_paths, int *error_count, int *had_error)
 {
@@ -84,32 +69,14 @@ static int	process_operand(const char *path, t_entry *file_entries,
 		*had_error = 1;
 		return (0);
 	}
-	if (S_ISDIR(st.st_mode))
-	{
-		if (!add_dir_path(dir_paths, dir_count, path))
-			*had_error = 1;
-	}
-	else
-	{
-		if (!add_file_entry(file_entries, file_count, path, &st))
-			*had_error = 1;
-	}
+	if (!add_operand_path(path, file_entries, file_count, dir_paths, dir_count,
+		S_ISDIR(st.st_mode) ? NULL : &st))
+		*had_error = 1;
 	return (1);
 }
 
-/*
- * Check if a string is "--" (end of options marker)
- * Returns 1 if it's "--", 0 otherwise
- */
-static int	is_end_of_options(const char *s)
-{
-	return (s && s[0] == '-' && s[1] == '-' && s[2] == '\0');
-}
 
-/*
- * Print all error messages for invalid operands
- * Prints errors in the order they were encountered
- */
+/* Print all error messages for invalid operands */
 static void	print_all_errors(char **error_paths, int error_count)
 {
 	int	i;
@@ -122,14 +89,7 @@ static void	print_all_errors(char **error_paths, int error_count)
 	}
 }
 
-/*
- * Classify operands into files and directories
- * Iterates through all arguments, ignores options
- * For each operand, determines if it's a file or directory
- * Collects errors first, then processes valid operands
- * Fills file_entries and dir_paths arrays accordingly
- * Note: "--" alone is ignored (means list current directory)
- */
+/* Parse all command-line arguments, ignore options, and classify each operand as file or directory */
 void	classify_operands(
 	int argc, char **argv,
 	t_entry *file_entries, int *file_count,
@@ -157,7 +117,7 @@ void	classify_operands(
 		}
 		if (after_end_marker || !is_option(argv[i]))
 		{
-			process_operand(argv[i], file_entries, file_count,
+			classify_single_operand(argv[i], file_entries, file_count,
 				dir_paths, dir_count, error_paths, &error_count, had_error);
 		}
 		i++;

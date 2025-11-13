@@ -2,10 +2,7 @@
 #include <errno.h>
 #include <string.h>
 
-/*
-** Allocate buffers for operands (files and directories)
-** Returns 1 on allocation error, 0 on success
-*/
+/* Allocate buffers for operands (files and directories) */
 static int	allocate_operands_buffers(t_entry **file_entries, char ***dir_paths,
 	int argc)
 {
@@ -21,10 +18,10 @@ static int	allocate_operands_buffers(t_entry **file_entries, char ***dir_paths,
 }
 
 /*
-** Process operands: classify, display, and free resources
+** Handle all operands: classify, display, and free resources
 ** Returns error status (1 if errors occurred, 0 otherwise)
 */
-static int	process_operands(int argc, char **argv, t_flags *flags)
+static int	handle_all_operands(int argc, char **argv, t_flags *flags)
 {
 	t_entry	*file_entries;
 	char	**dir_paths;
@@ -57,5 +54,5 @@ int			main(int argc, char **argv)
 		list_files(".", &flags);
 		return (0);
 	}
-	return (process_operands(argc, argv, &flags));
+	return (handle_all_operands(argc, argv, &flags));
 }

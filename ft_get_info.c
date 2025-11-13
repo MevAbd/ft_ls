@@ -47,7 +47,7 @@ void	get_user_info(uid_t uid, const char **user_name)
 		*user_name = pwd->pw_name;
 	else
 	{
-		ft_itoa((int)uid, uid_buf);
+		ft_putnbr((long long)uid, uid_buf);
 		*user_name = uid_buf;
 	}
 }
@@ -63,7 +63,7 @@ void	get_group_info(gid_t gid, const char **group_name)
 		*group_name = grp->gr_name;
 	else
 	{
-		ft_itoa((int)gid, gid_buf);
+		ft_putnbr((long long)gid, gid_buf);
 		*group_name = gid_buf;
 	}
 }

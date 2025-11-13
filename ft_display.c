@@ -2,43 +2,16 @@
 #include <errno.h>
 #include <string.h>
 
-/*
- * Display the target of a symbolic link
- * Builds the full path of the link, reads target with readlink,
- * and displays " -> target" after the link name
- */
+/* Display the target of a symbolic link */
 static void	display_symlink_target(const t_entry *entry, const char *path)
 {
-	char *full;
-	char link_target[256];
-	int link_len;
-	size_t base_len;
-	size_t name_len;
-	size_t k;
-	size_t m;
-	int need_slash;
+	char	*full;
+	char	link_target[256];
+	int		link_len;
 
-	base_len = ft_strlen(path);
-	name_len = ft_strlen(entry->name);
-	need_slash = (base_len > 0 && path[base_len - 1] != '/');
-	full = (char *)malloc(base_len + need_slash + name_len + 1);
+	full = ft_build_full_path(path, entry->name);
 	if (!full)
 		return;
-	k = 0;
-	while (k < base_len)
-	{
-		full[k] = path[k];
-		k++;
-	}
-	if (need_slash)
-		full[k++] = '/';
-	m = 0;
-	while (entry->name[m])
-	{
-		full[k + m] = entry->name[m];
-		m++;
-	}
-	full[k + m] = '\0';
 	link_len = readlink(full, link_target, sizeof(link_target) - 1);
 	free(full);
 	if (link_len >= 0)
@@ -64,10 +37,10 @@ static void	display_long_entry(const t_entry *entry, const char *path)
 
 	get_file_type_char(entry->st.st_mode, &type);
 	get_permissions(entry->st.st_mode, perms);
-	nlink_len = ft_itoa((int)entry->st.st_nlink, nlink_buf);
+	nlink_len = ft_putnbr((long long)entry->st.st_nlink, nlink_buf);
 	get_user_info(entry->st.st_uid, &user_name);
 	get_group_info(entry->st.st_gid, &group_name);
-	size_len = ft_itoa((int)entry->st.st_size, size_buf);
+	size_len = ft_putnbr((long long)entry->st.st_size, size_buf);
 	format_date(entry->st.st_mtime, date_buf);
 	write(1, &type, 1);
 	write(1, perms, 9);

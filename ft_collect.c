@@ -19,39 +19,6 @@ static void	print_dir_error(const char *path)
 	write(2, "\n", 1);
 }
 
-/* Build a full path from a base directory and a name */
-static char	*build_full_path(const char *base, const char *name)
-{
-	size_t	base_len;
-	size_t	name_len;
-	size_t	k;
-	size_t	m;
-	int		need_slash;
-	char	*full;
-
-	base_len = ft_strlen(base);
-	name_len = ft_strlen(name);
-	need_slash = (base_len > 0 && base[base_len - 1] != '/');
-	full = (char *)malloc(base_len + need_slash + name_len + 1);
-	if (full == NULL)
-		return (NULL);
-	k = 0;
-	while (k < base_len)
-	{
-		full[k] = base[k];
-		k++;
-	}
-	if (need_slash)
-		full[k++] = '/';
-	m = 0;
-	while (m < name_len)
-	{
-		full[k + m] = name[m];
-		m++;
-	}
-	full[k + m] = '\0';
-	return (full);
-}
 
 /* Collect data for a single entry (file/directory) */
 static int		collect_single_entry(const char *path, const char *name, t_entry *entry)
@@ -59,7 +26,7 @@ static int		collect_single_entry(const char *path, const char *name, t_entry *en
 	char		*full;
 	struct stat	st;
 
-	full = build_full_path(path, name);
+	full = ft_build_full_path(path, name);
 	if (full == NULL)
 		return (0);
 	if (lstat(full, &st) != 0)

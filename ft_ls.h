@@ -41,12 +41,14 @@ typedef struct s_entry
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s);
-int		ft_itoa(int n, char *buf);
+int		ft_putnbr(long long n, char *buf);
+char	*ft_build_full_path(const char *base, const char *name);
 
 // ============================================================================
 // PARSING AND ARGUMENT FUNCTIONS
 // ============================================================================
 int		is_option(const char *s);
+int		is_end_of_options(const char *s);
 int		count_operands(int argc, char **argv);
 void	parse_args(int argc, char **argv, t_flags *flags);
 

@@ -69,53 +69,13 @@ void	format_date(time_t mtime, char *date_buf)
 		format_date_with_time(tm_info, date_buf, months);
 }
 
-/*
-** Write a total number (for the "total" line)
-** Converts the number to string and displays it
-*/
-static void	write_total_number(long long total)
-{
-	char total_str[32];
-	int len;
-	long long tmp;
-	int j;
-
-	len = 0;
-	tmp = total;
-	if (tmp == 0)
-	{
-		total_str[0] = '0';
-		len = 1;
-	}
-	else
-	{
-		while (tmp > 0)
-		{
-			total_str[len++] = '0' + (tmp % 10);
-			tmp /= 10;
-		}
-		j = 0;
-		while (j < len / 2)
-		{
-			char c = total_str[j];
-			total_str[j] = total_str[len - 1 - j];
-			total_str[len - 1 - j] = c;
-			j++;
-		}
-	}
-	total_str[len] = '\0';
-	write(1, total_str, len);
-}
-
-/*
-** Display the "total X" line at the start of long format
-** Calculates the sum of blocks (st_blocks) of all files
-** Used only for directories (show_total = 1)
-*/
+/* Display the "total X" line at the start of long format */
 void	print_total(t_entry *entries, int count)
 {
-	long long total;
-	int i;
+	long long	total;
+	char		total_str[32];
+	int			len;
+	int			i;
 
 	total = 0;
 	i = 0;
@@ -125,6 +85,7 @@ void	print_total(t_entry *entries, int count)
 		i++;
 	}
 	write(1, "total ", 6);
-	write_total_number(total);
+	len = ft_putnbr(total, total_str);
+	write(1, total_str, len);
 	write(1, "\n", 1);
 }
