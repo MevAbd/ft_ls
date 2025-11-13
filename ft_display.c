@@ -22,37 +22,59 @@ static void		display_symlink_target(const t_entry *entry, const char *path)
 	}
 }
 
-/* Display a single line in long format (-l) */
-static void		display_long_entry(const t_entry *entry, const char *path)
+/* Display type and permissions */
+static void		display_type_and_perms(mode_t mode)
 {
-	char 		type;
-	char 		perms[10];
-	char 		nlink_buf[32];
-	char 		size_buf[32];
-	char 		date_buf[13];
-	const char 	*user_name;
-	const char 	*group_name;
-	int 		nlink_len;
-	int 		size_len;
+	char	type;
+	char	perms[10];
 
-	get_file_type_char(entry->st.st_mode, &type);
-	get_permissions(entry->st.st_mode, perms);
-	nlink_len = ft_putnbr((long long)entry->st.st_nlink, nlink_buf);
-	get_user_info(entry->st.st_uid, &user_name);
-	get_group_info(entry->st.st_gid, &group_name);
-	size_len = ft_putnbr((long long)entry->st.st_size, size_buf);
-	format_date(entry->st.st_mtime, date_buf);
+	get_file_type_char(mode, &type);
+	get_permissions(mode, perms);
 	write(1, &type, 1);
 	write(1, perms, 9);
 	write(1, " ", 1);
-	write(1, nlink_buf, nlink_len);
+}
+
+/* Display a number with padding */
+static void		display_number_padded(long long n, int max_width)
+{
+	char	buf[32];
+	int		len;
+
+	len = ft_putnbr(n, buf);
+	write_padding(len, max_width);
+	write(1, buf, len);
+}
+
+/* Display a string with padding */
+static void		display_string_padded(const char *str, int max_width)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	write(1, str, len);
+	write_padding(len, max_width);
+}
+
+/* Display a single line in long format (-l) */
+static void		display_long_entry(const t_entry *entry, const char *path, int *widths)
+{
+	char		date_buf[13];
+	const char	*user_name;
+	const char	*group_name;
+
+	display_type_and_perms(entry->st.st_mode);
+	display_number_padded((long long)entry->st.st_nlink, widths[0]);
 	write(1, " ", 1);
-	write(1, user_name, ft_strlen(user_name));
+	get_user_info(entry->st.st_uid, &user_name);
+	display_string_padded(user_name, widths[1]);
 	write(1, "  ", 2);
-	write(1, group_name, ft_strlen(group_name));
+	get_group_info(entry->st.st_gid, &group_name);
+	display_string_padded(group_name, widths[2]);
 	write(1, "  ", 2);
-	write(1, size_buf, size_len);
+	display_number_padded((long long)entry->st.st_size, widths[3]);
 	write(1, " ", 1);
+	format_date(entry->st.st_mtime, date_buf);
 	write(1, date_buf, ft_strlen(date_buf));
 	write(1, " ", 1);
 	write(1, entry->name, ft_strlen(entry->name));
@@ -66,15 +88,19 @@ static void		display_long_format(t_entry *entries, int count, t_flags *flags,
 				const char *path, int show_total)
 {
 	int 		i;
+	int			widths[4];
 
 	if (show_total && count > 0)
 		print_total(entries, count);
+	if (count == 0)
+		return;
+	calculate_column_widths(entries, count, widths);
 	if (!flags->r)
 	{
 		i = 0;
 		while (i < count)
 		{
-			display_long_entry(&entries[i], path);
+			display_long_entry(&entries[i], path, widths);
 			i++;
 		}
 	}
@@ -83,7 +109,7 @@ static void		display_long_format(t_entry *entries, int count, t_flags *flags,
 		i = count - 1;
 		while (i >= 0)
 		{
-			display_long_entry(&entries[i], path);
+			display_long_entry(&entries[i], path, widths);
 			i--;
 		}
 	}

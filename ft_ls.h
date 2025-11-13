@@ -100,6 +100,8 @@ void	print_dirs_sections(char **dirs, int dir_count, int had_files,
 // FORMATTING FUNCTIONS
 // ============================================================================
 void	format_date(time_t mtime, char *date_buf);
+void	calculate_column_widths(t_entry *entries, int count, int *widths);
+void	write_padding(int current_len, int max_width);
 
 // ============================================================================
 // INFORMATION RETRIEVAL FUNCTIONS
