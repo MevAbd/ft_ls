@@ -1,10 +1,6 @@
 #include "ft_ls.h"
 
-/*
- * Determine the file type character according to st_mode
- * Returns: '-' (file), 'd' (directory), 'l' (link), 'c' (character),
- *          'b' (block), 'p' (FIFO), 's' (socket), '?' (unknown)
- */
+/* Determine the file type character according to st_mode */
 void	get_file_type_char(mode_t mode, char *type)
 {
 	if (S_ISREG(mode))
@@ -25,10 +21,7 @@ void	get_file_type_char(mode_t mode, char *type)
 		*type = '?';
 }
 
-/*
- * Convert permissions (st_mode) to rwxrwxrwx string
- * Fills the perms array with user/group/other permissions
- */
+/* Convert permissions to rwxrwxrwx string */
 void	get_permissions(mode_t mode, char *perms)
 {
 	perms[0] = (mode & S_IRUSR) ? 'r' : '-';
@@ -43,50 +36,18 @@ void	get_permissions(mode_t mode, char *perms)
 	perms[9] = '\0';
 }
 
-/*
- * Get username or UID
- * Uses getpwuid to get the name, otherwise converts UID to string
- * Buffer is static to avoid scope issues
- */
+/* Get username or UID */
 void	get_user_info(uid_t uid, const char **user_name)
 {
-	struct passwd *pwd;
-	static char uid_buf[32];
-	int len;
-	int i;
-	uid_t tmp;
+	struct passwd	*pwd;
+	static char		uid_buf[32];
 
 	pwd = getpwuid(uid);
 	if (pwd)
 		*user_name = pwd->pw_name;
 	else
 	{
-		len = 0;
-		tmp = uid;
-		if (tmp == 0)
-		{
-			uid_buf[0] = '0';
-			len = 1;
-		}
-		else
-		{
-			i = 0;
-			while (tmp > 0)
-			{
-				uid_buf[i++] = '0' + (tmp % 10);
-				tmp /= 10;
-			}
-			len = i;
-			i = 0;
-			while (i < len / 2)
-			{
-				char c = uid_buf[i];
-				uid_buf[i] = uid_buf[len - 1 - i];
-				uid_buf[len - 1 - i] = c;
-				i++;
-			}
-		}
-		uid_buf[len] = '\0';
+		ft_utoa((unsigned int)uid, uid_buf);
 		*user_name = uid_buf;
 	}
 }
@@ -98,43 +59,15 @@ void	get_user_info(uid_t uid, const char **user_name)
  */
 void	get_group_info(gid_t gid, const char **group_name)
 {
-	struct group *grp;
-	static char gid_buf[32];
-	int len;
-	int i;
-	gid_t tmp;
+	struct group	*grp;
+	static char		gid_buf[32];
 
 	grp = getgrgid(gid);
 	if (grp)
 		*group_name = grp->gr_name;
 	else
 	{
-		len = 0;
-		tmp = gid;
-		if (tmp == 0)
-		{
-			gid_buf[0] = '0';
-			len = 1;
-		}
-		else
-		{
-			i = 0;
-			while (tmp > 0)
-			{
-				gid_buf[i++] = '0' + (tmp % 10);
-				tmp /= 10;
-			}
-			len = i;
-			i = 0;
-			while (i < len / 2)
-			{
-				char c = gid_buf[i];
-				gid_buf[i] = gid_buf[len - 1 - i];
-				gid_buf[len - 1 - i] = c;
-				i++;
-			}
-		}
-		gid_buf[len] = '\0';
+		ft_utoa((unsigned int)gid, gid_buf);
 		*group_name = gid_buf;
 	}
 }

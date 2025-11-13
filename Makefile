@@ -10,7 +10,7 @@ CFLAGS = -Wall -Wextra -Werror
 OBJ_DIR = obj
 
 # Fichiers sources
-SRCS = main.c libft.c ft_files.c ft_args.c ft_parse.c ft_operands.c ft_output.c ft_display.c ft_format.c ft_get_info.c
+SRCS = main.c libft.c ft_files.c ft_sort.c ft_collect.c ft_args.c ft_parse.c ft_operands.c ft_output.c ft_display.c ft_format.c ft_get_info.c
 
 # Fichiers objets (générés automatiquement dans OBJ_DIR)
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))

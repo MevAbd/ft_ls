@@ -42,3 +42,41 @@ char			*ft_strdup(const char *s)
 	dup[len] = '\0';
 	return (dup);
 }
+
+/* Convert an unsigned integer to string in a buffer */
+int				ft_utoa(unsigned int n, char *buf)
+{
+	int		len;
+	int		i;
+	unsigned int	tmp;
+
+	len = 0;
+	tmp = n;
+	if (tmp == 0)
+	{
+		buf[0] = '0';
+		len = 1;
+	}
+	else
+	{
+		i = 0;
+		while (tmp > 0)
+		{
+			buf[i++] = '0' + (tmp % 10);
+			tmp /= 10;
+		}
+		len = i;
+		i = 0;
+		while (i < len / 2)
+		{
+			char	c;
+
+			c = buf[i];
+			buf[i] = buf[len - 1 - i];
+			buf[len - 1 - i] = c;
+			i++;
+		}
+	}
+	buf[len] = '\0';
+	return (len);
+}

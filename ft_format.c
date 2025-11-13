@@ -167,11 +167,7 @@ static void	write_total_number(long long total)
 	write(1, total_str, len);
 }
 
-/*
- * Display the "total X" line at the start of long format
- * Calculates the sum of blocks (st_blocks) of all files
- * Used only for directories (show_total = 1)
- */
+/* Display the "total X" line at the start of long format */
 void	print_total(t_entry *entries, int count)
 {
 	long long total;

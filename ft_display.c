@@ -49,12 +49,7 @@ static void	display_symlink_target(const t_entry *entry, const char *path)
 	}
 }
 
-/*
- * Display a single line in long format (-l)
- * Format: "-rwxr-xr-x  1 user  group  1234  10 nov 15:00  filename"
- * Retrieves all info (type, permissions, nlink, user, group, size, date)
- * Displays target if it's a symbolic link
- */
+/* Display a single line in long format (-l) */
 static void	display_long_entry(const t_entry *entry, const char *path)
 {
 	char type;
@@ -93,12 +88,7 @@ static void	display_long_entry(const t_entry *entry, const char *path)
 	write(1, "\n", 1);
 }
 
-/*
- * Display all entries in long format (-l)
- * Displays "total" if show_total is true (for directories only)
- * Iterates through all entries and displays each with display_long_entry
- * Handles order (normal or reverse according to flags->r)
- */
+/* Display all entries in long format (-l) */
 static void	display_long_format(t_entry *entries, int count, t_flags *flags,
 	const char *path, int show_total)
 {
@@ -126,11 +116,7 @@ static void	display_long_format(t_entry *entries, int count, t_flags *flags,
 	}
 }
 
-/*
- * Display all entries in simple format (without -l)
- * Displays just the name of each file, one per line
- * Handles order (normal or reverse according to reverse)
- */
+/* Display all entries in simple format (without -l) */
 static void	display_simple_format(t_entry *entries, int count, int reverse)
 {
 	int i;
@@ -157,11 +143,6 @@ static void	display_simple_format(t_entry *entries, int count, int reverse)
 	}
 }
 
-/*
- * Main entry point for display
- * Chooses between long format (-l) or simple format according to flags->l
- * show_total: 1 for directories (displays "total"), 0 for files
- */
 void	display_entries(t_entry *entries, int count, t_flags *flags,
 	const char *path, int show_total)
 {
