@@ -52,7 +52,6 @@ size_t	ft_strlen(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s);
 int		ft_putnbr(long long n, char *buf);
-char	*ft_build_full_path(const char *base, const char *name);
 
 // ============================================================================
 // PARSING AND ARGUMENT FUNCTIONS
@@ -65,6 +64,7 @@ void	parse_args(int argc, char **argv, t_flags *flags);
 // ============================================================================
 // FILE AND DIRECTORY MANAGEMENT FUNCTIONS
 // ============================================================================
+char	*ft_build_full_path(const char *base, const char *name);
 int		count_files(const char *path, int show_hidden);
 int		collect_entries(const char *path, t_entry *entries, int count,
 			int show_hidden);
