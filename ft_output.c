@@ -2,7 +2,7 @@
 
 /*
  * Sort an array of directory paths alphabetically
- * Uses bubble sort with case-insensitive comparison
+ * Uses bubble sort with case-sensitive comparison
  * Used to display directories in the same order as ls
  */
 static void	sort_dir_paths(char **dirs, int dir_count)
@@ -16,7 +16,7 @@ static void	sort_dir_paths(char **dirs, int dir_count)
 		j = 0;
 		while (j < dir_count - 1 - i)
 		{
-			if (ft_strcasecmp(dirs[j], dirs[j + 1]) > 0)
+			if (ft_strcmp(dirs[j], dirs[j + 1]) > 0)
 			{
 				char *tmp = dirs[j];
 				dirs[j] = dirs[j + 1];

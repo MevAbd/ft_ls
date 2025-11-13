@@ -40,9 +40,7 @@ typedef struct s_entry
 // ============================================================================
 size_t	ft_strlen(const char *s);
 int		ft_strcmp(const char *s1, const char *s2);
-int		ft_strcasecmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s);
-void	ft_swap(char **a, char **b);
 
 // ============================================================================
 // PARSING AND ARGUMENT FUNCTIONS
