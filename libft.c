@@ -94,12 +94,12 @@ int				ft_putnbr(long long n, char *buf)
 /* Build a full path from a base directory and a name */
 char			*ft_build_full_path(const char *base, const char *name)
 {
-	size_t	base_len;
-	size_t	name_len;
-	size_t	k;
-	size_t	m;
-	int		need_slash;
-	char	*full;
+	size_t		base_len;
+	size_t		name_len;
+	size_t		k;
+	size_t		m;
+	int			need_slash;
+	char		*full;
 
 	base_len = ft_strlen(base);
 	name_len = ft_strlen(name);

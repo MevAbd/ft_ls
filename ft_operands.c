@@ -3,10 +3,10 @@
 #include <string.h>
 
 /* Add a path to the appropriate array (file or directory) */
-static int	add_operand_path(const char *path, t_entry *file_entries,
-	int *file_count, char **dir_paths, int *dir_count, struct stat *st)
+static int		add_operand_path(const char *path, t_operands_data *data,
+				struct stat *st)
 {
-	char	*dup_path;
+	char		*dup_path;
 
 	dup_path = ft_strdup(path);
 	if (dup_path == NULL)
@@ -16,47 +16,45 @@ static int	add_operand_path(const char *path, t_entry *file_entries,
 	}
 	if (st != NULL)
 	{
-		file_entries[*file_count].name = dup_path;
-		file_entries[*file_count].mtime = st->st_mtime;
-		file_entries[*file_count].st = *st;
-		(*file_count)++;
+		data->file_entries[data->file_count].name = dup_path;
+		data->file_entries[data->file_count].mtime = st->st_mtime;
+		data->file_entries[data->file_count].st = *st;
+		data->file_count++;
 	}
 	else
 	{
-		dir_paths[*dir_count] = dup_path;
-		(*dir_count)++;
+		data->dir_paths[data->dir_count] = dup_path;
+		data->dir_count++;
 	}
 	return (1);
 }
 
 /* Check if a single path is a file or directory and add it to the appropriate array */
-static int	classify_single_operand(const char *path, t_entry *file_entries,
-	int *file_count, char **dir_paths, int *dir_count,
-	char **error_paths, int *error_count, int *had_error)
+static int		classify_single_operand(const char *path, t_operands_data *data,
+				char **error_paths, int *error_count)
 {
-	struct stat st;
+	struct stat	st;
 
 	if (lstat(path, &st) != 0)
 	{
 		error_paths[*error_count] = (char *)path;
 		(*error_count)++;
-		*had_error = 1;
+		data->had_error = 1;
 		return (0);
 	}
-	if (!add_operand_path(path, file_entries, file_count, dir_paths, dir_count,
-		S_ISDIR(st.st_mode) ? NULL : &st))
-		*had_error = 1;
+	if (!add_operand_path(path, data, S_ISDIR(st.st_mode) ? NULL : &st))
+		data->had_error = 1;
 	return (1);
 }
 
 
 
 /* Count the number of operands (arguments that are not options) */
-int	count_operands(int argc, char **argv)
+int				count_operands(int argc, char **argv)
 {
-	int	i;
-	int	count;
-	int	after_end_marker;
+	int			i;
+	int			count;
+	int			after_end_marker;
 
 	i = 1;
 	count = 0;
@@ -79,53 +77,43 @@ int	count_operands(int argc, char **argv)
 }
 
 /* Allocate buffers for operands (files and directories) */
-static int	allocate_operands_buffers(t_entry **file_entries, char ***dir_paths,
-	int argc)
+static int		allocate_operands_buffers(t_operands_data *data, int argc)
 {
-	*file_entries = (t_entry *)malloc(sizeof(t_entry) * argc);
-	*dir_paths = (char **)malloc(sizeof(char *) * argc);
-	if (*file_entries == NULL || *dir_paths == NULL)
+	data->file_entries = (t_entry *)malloc(sizeof(t_entry) * argc);
+	data->dir_paths = (char **)malloc(sizeof(char *) * argc);
+	if (data->file_entries == NULL || data->dir_paths == NULL)
 	{
-		free(*file_entries);
-		free(*dir_paths);
+		free(data->file_entries);
+		free(data->dir_paths);
 		return (1);
 	}
+	data->file_count = 0;
+	data->dir_count = 0;
+	data->had_error = 0;
 	return (0);
 }
 
 /* Handle all operands: classify, display, and free resources */
-int	handle_all_operands(int argc, char **argv, t_flags *flags)
+int				handle_all_operands(int argc, char **argv, t_flags *flags)
 {
-	t_entry	*file_entries;
-	char	**dir_paths;
-	int		file_count;
-	int		dir_count;
-	int		had_error;
+	t_operands_data	data;
 
-	if (allocate_operands_buffers(&file_entries, &dir_paths, argc))
+	if (allocate_operands_buffers(&data, argc))
 		return (1);
-	file_count = 0;
-	dir_count = 0;
-	had_error = 0;
-	classify_operands(argc, argv, file_entries, &file_count,
-		dir_paths, &dir_count, &had_error);
-	print_files_section(file_entries, file_count, flags);
-	print_dirs_sections(dir_paths, dir_count, file_count > 0, flags);
-	free_operands(file_entries, file_count, dir_paths, dir_count);
-	return (had_error ? 1 : 0);
+	classify_operands(argc, argv, &data);
+	print_files_section(data.file_entries, data.file_count, flags);
+	print_dirs_sections(data.dir_paths, data.dir_count, data.file_count > 0, flags);
+	free_operands(data.file_entries, data.file_count, data.dir_paths, data.dir_count);
+	return (data.had_error ? 1 : 0);
 }
 
 /* Parse all command-line arguments, ignore options, and classify each operand as file or directory */
-void	classify_operands(
-	int argc, char **argv,
-	t_entry *file_entries, int *file_count,
-	char **dir_paths, int *dir_count,
-	int *had_error)
+void			classify_operands(int argc, char **argv, t_operands_data *data)
 {
-	int		i;
-	int		after_end_marker;
-	char	**error_paths;
-	int		error_count;
+	int			i;
+	int			after_end_marker;
+	char		**error_paths;
+	int			error_count;
 
 	error_paths = (char **)malloc(sizeof(char *) * argc);
 	if (error_paths == NULL)
@@ -143,8 +131,7 @@ void	classify_operands(
 		}
 		if (after_end_marker || !is_option(argv[i]))
 		{
-			classify_single_operand(argv[i], file_entries, file_count,
-				dir_paths, dir_count, error_paths, &error_count, had_error);
+			classify_single_operand(argv[i], data, error_paths, &error_count);
 		}
 		i++;
 	}

@@ -35,6 +35,16 @@ typedef struct s_entry
 	struct stat	st;         // Complete stat (for -l format)
 }	t_entry;
 
+// Structure for operands data (files and directories from command-line arguments)
+typedef struct s_operands_data
+{
+	t_entry		*file_entries;  // Array of file entries
+	int			file_count;    // Number of files
+	char		**dir_paths;   // Array of directory paths
+	int			dir_count;     // Number of directories
+	int			had_error;     // Error flag
+}	t_operands_data;
+
 // ============================================================================
 // STRING MANIPULATION FUNCTIONS
 // ============================================================================
@@ -71,11 +81,7 @@ void	process_recursive_dirs(const char *path, t_entry *entries, int count,
 // ============================================================================
 int		count_operands(int argc, char **argv);
 int		handle_all_operands(int argc, char **argv, t_flags *flags);
-void	classify_operands(
-			int argc, char **argv,
-			t_entry *file_entries, int *file_count,
-			char **dir_paths, int *dir_count,
-			int *had_error);
+void	classify_operands(int argc, char **argv, t_operands_data *data);
 
 // ============================================================================
 // PRINTING FUNCTIONS

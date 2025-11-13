@@ -1,7 +1,7 @@
 #include "ft_ls.h"
 
 /* Determine the file type character according to st_mode */
-void	get_file_type_char(mode_t mode, char *type)
+void			get_file_type_char(mode_t mode, char *type)
 {
 	if (S_ISREG(mode))
 		*type = '-';
@@ -22,7 +22,7 @@ void	get_file_type_char(mode_t mode, char *type)
 }
 
 /* Convert permissions to rwxrwxrwx string */
-void	get_permissions(mode_t mode, char *perms)
+void			get_permissions(mode_t mode, char *perms)
 {
 	perms[0] = (mode & S_IRUSR) ? 'r' : '-';
 	perms[1] = (mode & S_IWUSR) ? 'w' : '-';
@@ -37,7 +37,7 @@ void	get_permissions(mode_t mode, char *perms)
 }
 
 /* Get username or UID */
-void	get_user_info(uid_t uid, const char **user_name)
+void				get_user_info(uid_t uid, const char **user_name)
 {
 	struct passwd	*pwd;
 	static char		uid_buf[32];
@@ -53,7 +53,7 @@ void	get_user_info(uid_t uid, const char **user_name)
 }
 
 /* Get group name or GID */
-void	get_group_info(gid_t gid, const char **group_name)
+void				get_group_info(gid_t gid, const char **group_name)
 {
 	struct group	*grp;
 	static char		gid_buf[32];

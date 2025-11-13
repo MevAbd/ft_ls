@@ -3,11 +3,11 @@
 #include <string.h>
 
 /* Display the target of a symbolic link */
-static void	display_symlink_target(const t_entry *entry, const char *path)
+static void		display_symlink_target(const t_entry *entry, const char *path)
 {
-	char	*full;
-	char	link_target[256];
-	int		link_len;
+	char		*full;
+	char		link_target[256];
+	int			link_len;
 
 	full = ft_build_full_path(path, entry->name);
 	if (!full)
@@ -23,17 +23,17 @@ static void	display_symlink_target(const t_entry *entry, const char *path)
 }
 
 /* Display a single line in long format (-l) */
-static void	display_long_entry(const t_entry *entry, const char *path)
+static void		display_long_entry(const t_entry *entry, const char *path)
 {
-	char type;
-	char perms[10];
-	char nlink_buf[32];
-	char size_buf[32];
-	char date_buf[13];
-	const char *user_name;
-	const char *group_name;
-	int nlink_len;
-	int size_len;
+	char 		type;
+	char 		perms[10];
+	char 		nlink_buf[32];
+	char 		size_buf[32];
+	char 		date_buf[13];
+	const char 	*user_name;
+	const char 	*group_name;
+	int 		nlink_len;
+	int 		size_len;
 
 	get_file_type_char(entry->st.st_mode, &type);
 	get_permissions(entry->st.st_mode, perms);
@@ -62,10 +62,10 @@ static void	display_long_entry(const t_entry *entry, const char *path)
 }
 
 /* Display all entries in long format (-l) */
-static void	display_long_format(t_entry *entries, int count, t_flags *flags,
-	const char *path, int show_total)
+static void		display_long_format(t_entry *entries, int count, t_flags *flags,
+				const char *path, int show_total)
 {
-	int i;
+	int 		i;
 
 	if (show_total && count > 0)
 		print_total(entries, count);
@@ -90,9 +90,9 @@ static void	display_long_format(t_entry *entries, int count, t_flags *flags,
 }
 
 /* Display all entries in simple format (without -l) */
-static void	display_simple_format(t_entry *entries, int count, int reverse)
+static void		display_simple_format(t_entry *entries, int count, int reverse)
 {
-	int i;
+	int 		i;
 
 	if (!reverse)
 	{
@@ -116,8 +116,8 @@ static void	display_simple_format(t_entry *entries, int count, int reverse)
 	}
 }
 
-void	display_entries(t_entry *entries, int count, t_flags *flags,
-	const char *path, int show_total)
+void			display_entries(t_entry *entries, int count, t_flags *flags,
+				const char *path, int show_total)
 {
 	if (flags->l)
 		display_long_format(entries, count, flags, path, show_total);

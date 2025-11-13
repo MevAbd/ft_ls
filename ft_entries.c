@@ -51,7 +51,7 @@ int					count_files(const char *path, int show_hidden)
 }
 
 /* Collect all entries from a directory */
-int	collect_entries(const char *path, t_entry *entries, int count,
+int					collect_entries(const char *path, t_entry *entries, int count,
 	int show_hidden)
 {
 	DIR				*dir;

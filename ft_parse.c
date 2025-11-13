@@ -19,7 +19,7 @@ static void		set_flag(char c, t_flags *flags)
 
 static void		parse_option_string(const char *opt_str, t_flags *flags)
 {
-	int	j;
+	int			j;
 
 	j = 1;
 	while (opt_str[j] != '\0')
@@ -37,7 +37,7 @@ static void		parse_option_string(const char *opt_str, t_flags *flags)
 /* Parse all command line arguments */
 void			parse_args(int argc, char **argv, t_flags *flags)
 {
-	int	i;
+	int			i;
 
 	flags->a = 0;
 	flags->r = 0;

@@ -3,7 +3,7 @@
 #include <string.h>
 
 /* Counts files, collects entries, sorts, displays, and handles recursion if -R */
-void	list_files(const char *path, t_flags *flags)
+void		list_files(const char *path, t_flags *flags)
 {
 	t_entry	*entries;
 	int		count;
@@ -28,7 +28,7 @@ void	list_files(const char *path, t_flags *flags)
 	free_entries(entries, count);
 }
 
-int	main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_flags	flags;
 	int		num_operands;

@@ -3,11 +3,11 @@
 #include <string.h>
 
 /* Print an error message for an inaccessible file/directory */
-void	print_error(const char *path)
+void			print_error(const char *path)
 {
-	const char *p1 = "ls: ";
-	const char *p2 = ": ";
-	const char *msg = strerror(errno);
+	const char 	*p1 = "ls: ";
+	const char 	*p2 = ": ";
+	const char 	*msg = strerror(errno);
 
 	write(2, p1, ft_strlen(p1));
 	write(2, path, ft_strlen(path));
@@ -17,7 +17,7 @@ void	print_error(const char *path)
 }
 
 /* Print an error message for an inaccessible directory */
-void	print_dir_error(const char *path)
+void			print_dir_error(const char *path)
 {
 	const char	*p1;
 	const char	*p2;
@@ -34,14 +34,14 @@ void	print_dir_error(const char *path)
 }
 
 /* Print an error message for a memory allocation failure */
-void	print_memory_error(void)
+void			print_memory_error(void)
 {
-	const char *msg = "ls: memory allocation failed\n";
+	const char 	*msg = "ls: memory allocation failed\n";
 	write(2, msg, ft_strlen(msg));
 }
 
 /* Print an error message for an invalid option */
-void	print_invalid_option(char c)
+void			print_invalid_option(char c)
 {
 	const char	*p1;
 	const char	*p2;
@@ -54,9 +54,9 @@ void	print_invalid_option(char c)
 }
 
 /* Print all error messages for invalid operands */
-void	print_all_errors(char **error_paths, int error_count)
+void			print_all_errors(char **error_paths, int error_count)
 {
-	int	i;
+	int			i;
 
 	i = 0;
 	while (i < error_count)
@@ -67,7 +67,7 @@ void	print_all_errors(char **error_paths, int error_count)
 }
 
 /* Display the "total X" line at the start of long format */
-void	print_total(t_entry *entries, int count)
+void			print_total(t_entry *entries, int count)
 {
 	long long	total;
 	char		total_str[32];
@@ -88,7 +88,7 @@ void	print_total(t_entry *entries, int count)
 }
 
 /* Display the files section (operands that are files) */
-void	print_files_section(t_entry *files, int file_count, t_flags *flags)
+void			print_files_section(t_entry *files, int file_count, t_flags *flags)
 {
 	if (file_count <= 0)
 		return;
@@ -97,12 +97,12 @@ void	print_files_section(t_entry *files, int file_count, t_flags *flags)
 }
 
 /* Display directory sections (operands that are directories) */
-void	print_dirs_sections(char **dirs, int dir_count, int had_files,
+void			print_dirs_sections(char **dirs, int dir_count, int had_files,
 	t_flags *flags)
 {
-	int i;
-	int printed_any_dir;
-	int multi;
+	int 		i;
+	int 		printed_any_dir;
+	int 		multi;
 
 	i = 0;
 	printed_any_dir = 0;

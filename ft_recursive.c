@@ -1,10 +1,10 @@
 #include "ft_ls.h"
 
 /* Process a single directory entry recursively */
-static void	process_single_dir(const char *path, const t_entry *entry,
+static void		process_single_dir(const char *path, const t_entry *entry,
 	t_flags *flags)
 {
-	char	*full_path;
+	char		*full_path;
 
 	if (ft_strcmp(entry->name, ".") != 0
 		&& ft_strcmp(entry->name, "..") != 0
@@ -23,7 +23,7 @@ static void	process_single_dir(const char *path, const t_entry *entry,
 }
 
 /* Process directories recursively (option -R) */
-void	process_recursive_dirs(const char *path, t_entry *entries, int count,
+void			process_recursive_dirs(const char *path, t_entry *entries, int count,
 	t_flags *flags)
 {
 	int		i;

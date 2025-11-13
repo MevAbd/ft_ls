@@ -1,10 +1,10 @@
 #include "ft_ls.h"
 
 /* Sort an array of directory paths alphabetically */
-void	sort_dir_paths(char **dirs, int dir_count)
+void		sort_dir_paths(char **dirs, int dir_count)
 {
-	int i;
-	int j;
+	int 	i;
+	int 	j;
 
 	i = 0;
 	while (i < dir_count - 1)
@@ -44,7 +44,7 @@ static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
 }
 
 /* Sort an array of entries (bubble sort) */
-void	sort_entries(t_entry *entries, int count, int use_time)
+void		sort_entries(t_entry *entries, int count, int use_time)
 {
 	int		i;
 	int		j;
