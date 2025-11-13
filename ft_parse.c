@@ -64,6 +64,9 @@ void			parse_args(int argc, char **argv, t_flags *flags)
 	i = 1;
 	while (i < argc)
 	{
+		if (argv[i] && argv[i][0] == '-' && argv[i][1] == '-'
+			&& argv[i][2] == '\0')
+			break;
 		if (is_option(argv[i]))
 			parse_option_string(argv[i], flags);
 		i++;

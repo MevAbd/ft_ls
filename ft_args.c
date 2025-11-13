@@ -18,24 +18,24 @@ int	count_operands(int argc, char **argv)
 {
 	int	i;
 	int	count;
-	int	found_end_marker;
+	int	after_end_marker;
 
 	i = 1;
 	count = 0;
-	found_end_marker = 0;
+	after_end_marker = 0;
 	while (i < argc)
 	{
 		if (is_end_of_options(argv[i]))
 		{
-			found_end_marker = 1;
+			after_end_marker = 1;
 			i++;
 			continue;
 		}
-		if (!is_option(argv[i]))
+		if (after_end_marker || !is_option(argv[i]))
 			count++;
 		i++;
 	}
-	if (found_end_marker && count == 0)
+	if (after_end_marker && count == 0)
 		return (0);
 	return (count);
 }

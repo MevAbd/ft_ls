@@ -1,10 +1,6 @@
 #include "ft_ls.h"
 
-/*
- * Sort an array of directory paths alphabetically
- * Uses bubble sort with case-sensitive comparison
- * Used to display directories in the same order as ls
- */
+/* Sort an array of directory paths alphabetically  */
 static void	sort_dir_paths(char **dirs, int dir_count)
 {
 	int i;

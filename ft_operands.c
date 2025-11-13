@@ -68,16 +68,19 @@ static int	add_dir_path(char **dir_paths, int *dir_count, const char *path)
 /*
  * Process an operand (file or directory in arguments)
  * Does an lstat to determine type and adds it to the right array
+ * If error, stores the path in error_paths array
  * Returns 1 on success, 0 on error (file doesn't exist)
  */
 static int	process_operand(const char *path, t_entry *file_entries,
-	int *file_count, char **dir_paths, int *dir_count, int *had_error)
+	int *file_count, char **dir_paths, int *dir_count,
+	char **error_paths, int *error_count, int *had_error)
 {
 	struct stat st;
 
 	if (lstat(path, &st) != 0)
 	{
-		print_error(path);
+		error_paths[*error_count] = (char *)path;
+		(*error_count)++;
 		*had_error = 1;
 		return (0);
 	}
@@ -104,9 +107,26 @@ static int	is_end_of_options(const char *s)
 }
 
 /*
+ * Print all error messages for invalid operands
+ * Prints errors in the order they were encountered
+ */
+static void	print_all_errors(char **error_paths, int error_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < error_count)
+	{
+		print_error(error_paths[i]);
+		i++;
+	}
+}
+
+/*
  * Classify operands into files and directories
  * Iterates through all arguments, ignores options
  * For each operand, determines if it's a file or directory
+ * Collects errors first, then processes valid operands
  * Fills file_entries and dir_paths arrays accordingly
  * Note: "--" alone is ignored (means list current directory)
  */
@@ -116,23 +136,34 @@ void	classify_operands(
 	char **dir_paths, int *dir_count,
 	int *had_error)
 {
-	int i;
+	int		i;
+	int		after_end_marker;
+	char	**error_paths;
+	int		error_count;
 
+	error_paths = (char **)malloc(sizeof(char *) * argc);
+	if (error_paths == NULL)
+		return;
 	i = 1;
+	after_end_marker = 0;
+	error_count = 0;
 	while (i < argc)
 	{
 		if (is_end_of_options(argv[i]))
 		{
+			after_end_marker = 1;
 			i++;
 			continue;
 		}
-		if (!is_option(argv[i]))
+		if (after_end_marker || !is_option(argv[i]))
 		{
 			process_operand(argv[i], file_entries, file_count,
-				dir_paths, dir_count, had_error);
+				dir_paths, dir_count, error_paths, &error_count, had_error);
 		}
 		i++;
 	}
+	print_all_errors(error_paths, error_count);
+	free(error_paths);
 }
 
 /*
