@@ -2,44 +2,33 @@
 #include <errno.h>
 #include <string.h>
 
-/* Allocate buffers for operands (files and directories) */
-static int	allocate_operands_buffers(t_entry **file_entries, char ***dir_paths,
-	int argc)
+/* Counts files, collects entries, sorts, displays, and handles recursion if -R */
+void	list_files(const char *path, t_flags *flags)
 {
-	*file_entries = (t_entry *)malloc(sizeof(t_entry) * argc);
-	*dir_paths = (char **)malloc(sizeof(char *) * argc);
-	if (*file_entries == NULL || *dir_paths == NULL)
+	t_entry	*entries;
+	int		count;
+	int		show_hidden;
+
+	show_hidden = flags->a;
+	count = count_files(path, show_hidden);
+	if (count == 0)
+		return;
+	entries = (t_entry *)malloc(sizeof(t_entry) * count);
+	if (entries == NULL)
+		return;
+	if (!collect_entries(path, entries, count, show_hidden))
 	{
-		free(*file_entries);
-		free(*dir_paths);
-		return (1);
+		free(entries);
+		return;
 	}
-	return (0);
+	sort_entries(entries, count, flags->t);
+	display_entries(entries, count, flags, path, 1);
+	if (flags->R)
+		process_recursive_dirs(path, entries, count, flags);
+	free_entries(entries, count);
 }
 
-/* Handle all operands: classify, display, and free resources */
-static int	handle_all_operands(int argc, char **argv, t_flags *flags)
-{
-	t_entry	*file_entries;
-	char	**dir_paths;
-	int		file_count;
-	int		dir_count;
-	int		had_error;
-
-	if (allocate_operands_buffers(&file_entries, &dir_paths, argc))
-		return (1);
-	file_count = 0;
-	dir_count = 0;
-	had_error = 0;
-	classify_operands(argc, argv, file_entries, &file_count,
-		dir_paths, &dir_count, &had_error);
-	print_files_section(file_entries, file_count, flags);
-	print_dirs_sections(dir_paths, dir_count, file_count > 0, flags);
-	free_operands(file_entries, file_count, dir_paths, dir_count);
-	return (had_error ? 1 : 0);
-}
- 
-int			main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_flags	flags;
 	int		num_operands;

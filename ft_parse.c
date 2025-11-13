@@ -1,23 +1,6 @@
 #include "ft_ls.h"
 
-/* Print an error message for an invalid option */
-static void		print_invalid_option(char c)
-{
-	const char	*p1;
-	const char	*p2;
 
-	p1 = "ls: invalid option -- ";
-	p2 = "\nusage: ls [-lRart] [file ...]\n";
-	write(2, p1, ft_strlen(p1));
-	write(2, &c, 1);
-	write(2, p2, ft_strlen(p2));
-}
-
-/* Check if a character is an allowed option */
-static int		is_allowed_option(char c)
-{
-	return (c == 'l' || c == 'R' || c == 'a' || c == 'r' || c == 't');
-}
 
 /* Set the flag corresponding to the option */
 static void		set_flag(char c, t_flags *flags)

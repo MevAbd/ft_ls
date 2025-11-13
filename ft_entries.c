@@ -2,23 +2,6 @@
 #include <errno.h>
 #include <string.h>
 
-/* Print an error message for an inaccessible directory */
-static void	print_dir_error(const char *path)
-{
-	const char	*p1;
-	const char	*p2;
-	const char	*msg;
-
-	p1 = "ls: ";
-	p2 = ": ";
-	msg = strerror(errno);
-	write(2, p1, ft_strlen(p1));
-	write(2, path, ft_strlen(path));
-	write(2, p2, ft_strlen(p2));
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-}
-
 
 /* Collect data for a single entry (file/directory) */
 static int		collect_single_entry(const char *path, const char *name, t_entry *entry)
@@ -43,21 +26,6 @@ static int		collect_single_entry(const char *path, const char *name, t_entry *en
 	return (1);
 }
 
-/*
-** Free collected entries on error
-** Used to clean up on failure during collection
-*/
-static void	free_collected_entries(t_entry *entries, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		free(entries[i].name);
-		i++;
-	}
-}
 
 /* Count the number of files in a directory */
 int					count_files(const char *path, int show_hidden)
@@ -82,11 +50,7 @@ int					count_files(const char *path, int show_hidden)
 	return (count);
 }
 
-/*
-** Collect all entries from a directory
-** Reads the directory, filters according to show_hidden, and collects metadata
-** Returns 1 on success, 0 on error
-*/
+/* Collect all entries from a directory */
 int	collect_entries(const char *path, t_entry *entries, int count,
 	int show_hidden)
 {
@@ -114,4 +78,3 @@ int	collect_entries(const char *path, t_entry *entries, int count,
 	closedir(dir);
 	return (1);
 }
-

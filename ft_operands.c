@@ -2,29 +2,6 @@
 #include <errno.h>
 #include <string.h>
 
-/* Print an error message for an inaccessible file/directory */
-static void	print_error(const char *path)
-{
-	const char *p1 = "ls: ";
-	const char *p2 = ": ";
-	const char *msg = strerror(errno);
-
-	write(2, p1, ft_strlen(p1));
-	write(2, path, ft_strlen(path));
-	write(2, p2, ft_strlen(p2));
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-}
-
-/*
- * Print an error message for a memory allocation failure
- */
-static void	print_memory_error(void)
-{
-	const char *msg = "ls: memory allocation failed\n";
-	write(2, msg, ft_strlen(msg));
-}
-
 /* Add a path to the appropriate array (file or directory) */
 static int	add_operand_path(const char *path, t_entry *file_entries,
 	int *file_count, char **dir_paths, int *dir_count, struct stat *st)
@@ -73,17 +50,69 @@ static int	classify_single_operand(const char *path, t_entry *file_entries,
 }
 
 
-/* Print all error messages for invalid operands */
-static void	print_all_errors(char **error_paths, int error_count)
+
+/* Count the number of operands (arguments that are not options) */
+int	count_operands(int argc, char **argv)
 {
 	int	i;
+	int	count;
+	int	after_end_marker;
 
-	i = 0;
-	while (i < error_count)
+	i = 1;
+	count = 0;
+	after_end_marker = 0;
+	while (i < argc)
 	{
-		print_error(error_paths[i]);
+		if (is_end_of_options(argv[i]))
+		{
+			after_end_marker = 1;
+			i++;
+			continue;
+		}
+		if (after_end_marker || !is_option(argv[i]))
+			count++;
 		i++;
 	}
+	if (after_end_marker && count == 0)
+		return (0);
+	return (count);
+}
+
+/* Allocate buffers for operands (files and directories) */
+static int	allocate_operands_buffers(t_entry **file_entries, char ***dir_paths,
+	int argc)
+{
+	*file_entries = (t_entry *)malloc(sizeof(t_entry) * argc);
+	*dir_paths = (char **)malloc(sizeof(char *) * argc);
+	if (*file_entries == NULL || *dir_paths == NULL)
+	{
+		free(*file_entries);
+		free(*dir_paths);
+		return (1);
+	}
+	return (0);
+}
+
+/* Handle all operands: classify, display, and free resources */
+int	handle_all_operands(int argc, char **argv, t_flags *flags)
+{
+	t_entry	*file_entries;
+	char	**dir_paths;
+	int		file_count;
+	int		dir_count;
+	int		had_error;
+
+	if (allocate_operands_buffers(&file_entries, &dir_paths, argc))
+		return (1);
+	file_count = 0;
+	dir_count = 0;
+	had_error = 0;
+	classify_operands(argc, argv, file_entries, &file_count,
+		dir_paths, &dir_count, &had_error);
+	print_files_section(file_entries, file_count, flags);
+	print_dirs_sections(dir_paths, dir_count, file_count > 0, flags);
+	free_operands(file_entries, file_count, dir_paths, dir_count);
+	return (had_error ? 1 : 0);
 }
 
 /* Parse all command-line arguments, ignore options, and classify each operand as file or directory */
@@ -121,25 +150,4 @@ void	classify_operands(
 	}
 	print_all_errors(error_paths, error_count);
 	free(error_paths);
-}
-
-/* Free memory allocated for operands */
-void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count)
-{
-	int i;
-
-	i = 0;
-	while (i < file_count)
-	{
-		free(files[i].name);
-		i++;
-	}
-	free(files);
-	i = 0;
-	while (i < dir_count)
-	{
-		free(dirs[i]);
-		i++;
-	}
-	free(dirs);
 }

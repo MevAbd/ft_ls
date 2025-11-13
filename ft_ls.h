@@ -49,7 +49,7 @@ char	*ft_build_full_path(const char *base, const char *name);
 // ============================================================================
 int		is_option(const char *s);
 int		is_end_of_options(const char *s);
-int		count_operands(int argc, char **argv);
+int		is_allowed_option(char c);
 void	parse_args(int argc, char **argv, t_flags *flags);
 
 // ============================================================================
@@ -59,29 +59,41 @@ int		count_files(const char *path, int show_hidden);
 int		collect_entries(const char *path, t_entry *entries, int count,
 			int show_hidden);
 void	sort_entries(t_entry *entries, int count, int use_time);
+void	sort_dir_paths(char **dirs, int dir_count);
 void	display_entries(t_entry *entries, int count, t_flags *flags,
 			const char *path, int show_total);
-void	free_entries(t_entry *entries, int count);
 void	list_files(const char *path, t_flags *flags);
+void	process_recursive_dirs(const char *path, t_entry *entries, int count,
+			t_flags *flags);
 
 // ============================================================================
 // OPERAND MANAGEMENT FUNCTIONS (files/directories in arguments)
 // ============================================================================
+int		count_operands(int argc, char **argv);
+int		handle_all_operands(int argc, char **argv, t_flags *flags);
 void	classify_operands(
 			int argc, char **argv,
 			t_entry *file_entries, int *file_count,
 			char **dir_paths, int *dir_count,
 			int *had_error);
+
+// ============================================================================
+// PRINTING FUNCTIONS
+// ============================================================================
+void	print_error(const char *path);
+void	print_dir_error(const char *path);
+void	print_memory_error(void);
+void	print_invalid_option(char c);
+void	print_all_errors(char **error_paths, int error_count);
+void	print_total(t_entry *entries, int count);
 void	print_files_section(t_entry *files, int file_count, t_flags *flags);
 void	print_dirs_sections(char **dirs, int dir_count, int had_files,
 			t_flags *flags);
-void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count);
 
 // ============================================================================
 // FORMATTING FUNCTIONS
 // ============================================================================
 void	format_date(time_t mtime, char *date_buf);
-void	print_total(t_entry *entries, int count);
 
 // ============================================================================
 // INFORMATION RETRIEVAL FUNCTIONS
@@ -90,5 +102,12 @@ void	get_file_type_char(mode_t mode, char *type);
 void	get_permissions(mode_t mode, char *perms);
 void	get_user_info(uid_t uid, const char **user_name);
 void	get_group_info(gid_t gid, const char **group_name);
+
+// ============================================================================
+// MEMORY MANAGEMENT FUNCTIONS
+// ============================================================================
+void	free_collected_entries(t_entry *entries, int count);
+void	free_entries(t_entry *entries, int count);
+void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count);
 
 #endif

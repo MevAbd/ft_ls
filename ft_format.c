@@ -68,24 +68,3 @@ void	format_date(time_t mtime, char *date_buf)
 	else
 		format_date_with_time(tm_info, date_buf, months);
 }
-
-/* Display the "total X" line at the start of long format */
-void	print_total(t_entry *entries, int count)
-{
-	long long	total;
-	char		total_str[32];
-	int			len;
-	int			i;
-
-	total = 0;
-	i = 0;
-	while (i < count)
-	{
-		total += entries[i].st.st_blocks;
-		i++;
-	}
-	write(1, "total ", 6);
-	len = ft_putnbr(total, total_str);
-	write(1, total_str, len);
-	write(1, "\n", 1);
-}

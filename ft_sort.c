@@ -1,5 +1,29 @@
 #include "ft_ls.h"
 
+/* Sort an array of directory paths alphabetically */
+void	sort_dir_paths(char **dirs, int dir_count)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < dir_count - 1)
+	{
+		j = 0;
+		while (j < dir_count - 1 - i)
+		{
+			if (ft_strcmp(dirs[j], dirs[j + 1]) > 0)
+			{
+				char *tmp = dirs[j];
+				dirs[j] = dirs[j + 1];
+				dirs[j + 1] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 /* Compare two entries for sorting */
 static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
 {
