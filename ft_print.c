@@ -5,8 +5,8 @@
 /* Print an error message for an inaccessible file/directory */
 void			print_error(const char *path)
 {
-	const char 	*p1 = "ls: ";
-	const char 	*p2 = ": ";
+	const char 	*p1 = "ls: cannot access '";
+	const char 	*p2 = "': ";
 	const char 	*msg = strerror(errno);
 
 	write(2, p1, ft_strlen(p1));
@@ -23,8 +23,8 @@ void			print_dir_error(const char *path)
 	const char	*p2;
 	const char	*msg;
 
-	p1 = "ls: ";
-	p2 = ": ";
+	p1 = "ls: cannot access '";
+	p2 = "': ";
 	msg = strerror(errno);
 	write(2, p1, ft_strlen(p1));
 	write(2, path, ft_strlen(path));
