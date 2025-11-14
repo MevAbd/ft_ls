@@ -73,6 +73,9 @@ void			print_total(t_entry *entries, int count)
 	char		total_str[32];
 	int			len;
 	int			i;
+	/* st_blocks is in 512-byte units, ls displays in 1024-byte units (1KB) */
+	const int	ST_BLOCK_SIZE = 512;
+	const int	LS_DISPLAY_BLOCK_SIZE = 1024;
 
 	total = 0;
 	i = 0;
@@ -81,8 +84,8 @@ void			print_total(t_entry *entries, int count)
 		total += entries[i].st.st_blocks;
 		i++;
 	}
-	/* st_blocks is in 512-byte units, ls displays in 1024-byte units */
-	total = total / 2;
+	/* Convert from 512-byte units to 1024-byte units for display */
+	total = (total * ST_BLOCK_SIZE) / LS_DISPLAY_BLOCK_SIZE;
 	write(1, "total ", 6);
 	len = ft_putnbr(total, total_str);
 	write(1, total_str, len);
