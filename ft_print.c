@@ -81,6 +81,8 @@ void			print_total(t_entry *entries, int count)
 		total += entries[i].st.st_blocks;
 		i++;
 	}
+	/* st_blocks is in 512-byte units, ls displays in 1024-byte units */
+	total = total / 2;
 	write(1, "total ", 6);
 	len = ft_putnbr(total, total_str);
 	write(1, total_str, len);

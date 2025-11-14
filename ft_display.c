@@ -90,7 +90,7 @@ static void		display_long_format(t_entry *entries, int count, t_flags *flags,
 	int 		i;
 	int			widths[4];
 
-	if (show_total && count > 0)
+	if (show_total)
 		print_total(entries, count);
 	if (count == 0)
 		return;
