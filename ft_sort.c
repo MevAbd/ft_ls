@@ -24,7 +24,41 @@ void		sort_dir_paths(char **dirs, int dir_count)
 	}
 }
 
+
+/* Cross-platform access to mtime (macOS / Linux) */
+#ifdef __APPLE__
+# define MTIME_SEC(st)  ((st).st_mtimespec.tv_sec)
+# define MTIME_NSEC(st) ((st).st_mtimespec.tv_nsec)
+#else
+# define MTIME_SEC(st)  ((st).st_mtim.tv_sec)
+# define MTIME_NSEC(st) ((st).st_mtim.tv_nsec)
+#endif
+
 /* Compare two entries for sorting */
+static int compare_entries(const t_entry *a, const t_entry *b, int use_time)
+{
+    long sec_diff;
+    long nsec_diff;
+
+    if (use_time)
+    {
+        sec_diff = (long)MTIME_SEC(a->st) - (long)MTIME_SEC(b->st);
+        if (sec_diff != 0)
+            return (sec_diff > 0 ? -1 : 1);
+
+        nsec_diff = (long)MTIME_NSEC(a->st) - (long)MTIME_NSEC(b->st);
+        if (nsec_diff != 0)
+            return (nsec_diff > 0 ? -1 : 1);
+
+        return ft_strcmp(a->name, b->name);
+    }
+    return ft_strcmp(a->name, b->name);
+}
+
+
+
+/*
+Compare two entries for sorting 
 static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
 {
 	long	sec_diff;
@@ -41,7 +75,7 @@ static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
 		return (ft_strcmp(a->name, b->name));
 	}
 	return (ft_strcmp(a->name, b->name));
-}
+}*/
 
 /* Sort an array of entries (bubble sort) */
 void		sort_entries(t_entry *entries, int count, int use_time)
