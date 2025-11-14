@@ -103,7 +103,14 @@ run_test_with_args() {
         section_passed=$((section_passed + 1))
     else
         echo -e "${RED}$test_name erreur (-$opts $args)${NC}"
+        echo -e "${YELLOW}Commande ft_ls: ./ft_ls -$opts $args${NC}"
+        echo -e "${YELLOW}Commande ls: LC_ALL=C /bin/bash -c \"ls -$opts $args\"${NC}"
         echo -e "${RED}Difference:${NC}"
+        echo "--- ft_ls output ---"
+        cat "$TMP_DIR/mine"
+        echo "--- ls output ---"
+        cat "$TMP_DIR/real"
+        echo "--- diff ---"
         diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
         failed_tests=$((failed_tests + 1))
     fi
