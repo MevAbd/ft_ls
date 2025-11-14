@@ -22,6 +22,8 @@ void		list_files(const char *path, t_flags *flags)
 		return;
 	}
 	sort_entries(entries, count, flags->t);
+	if (flags->R && ft_strcmp(path, ".") == 0)
+		write(1, ".:\n", 3);
 	display_entries(entries, count, flags, path, 1);
 	if (flags->R)
 		process_recursive_dirs(path, entries, count, flags);

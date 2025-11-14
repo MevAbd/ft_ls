@@ -1,6 +1,6 @@
 NAME = ft_ls
 
-CC = cc
+CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 OBJ_DIR = obj
