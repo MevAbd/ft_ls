@@ -78,8 +78,9 @@ run_test() {
         echo -e "${GREEN}$test_name reussis (-$opts)${NC}"
         section_passed=$((section_passed + 1))
     else
-        echo -e "${RED}$test_name erreur${NC}"
-        echo -e "${RED}il y a une difference avec : ls -$opts${NC}"
+        echo -e "${RED}$test_name erreur (-$opts)${NC}"
+        echo -e "${RED}Difference:${NC}"
+        diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
         failed_tests=$((failed_tests + 1))
     fi
     
@@ -101,8 +102,9 @@ run_test_with_args() {
         echo -e "${GREEN}$test_name reussis (-$opts $args)${NC}"
         section_passed=$((section_passed + 1))
     else
-        echo -e "${RED}$test_name erreur${NC}"
-        echo -e "${RED}il y a une difference avec : ls -$opts $args${NC}"
+        echo -e "${RED}$test_name erreur (-$opts $args)${NC}"
+        echo -e "${RED}Difference:${NC}"
+        diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
         failed_tests=$((failed_tests + 1))
     fi
     
@@ -121,7 +123,8 @@ if diff "$TMP_DIR/mine" "$TMP_DIR/real" > /dev/null 2>&1; then
     section_passed=$((section_passed + 1))
 else
     echo -e "${RED}test $test_num erreur${NC}"
-    echo -e "${RED}il y a une difference avec : ls${NC}"
+    echo -e "${RED}Difference:${NC}"
+    diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
     failed_tests=$((failed_tests + 1))
 fi
 test_num=$((test_num + 1))
@@ -165,8 +168,9 @@ if diff "$TMP_DIR/mine" "$TMP_DIR/real" > /dev/null 2>&1; then
     echo -e "${GREEN}test $test_num reussis (with directory)${NC}"
     section_passed=$((section_passed + 1))
 else
-    echo -e "${RED}test $test_num erreur${NC}"
-    echo -e "${RED}il y a une difference avec : ls $TEST_DIR${NC}"
+    echo -e "${RED}test $test_num erreur (with directory)${NC}"
+    echo -e "${RED}Difference:${NC}"
+    diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
     failed_tests=$((failed_tests + 1))
 fi
 test_num=$((test_num + 1))
@@ -193,8 +197,9 @@ if diff "$TMP_DIR/mine" "$TMP_DIR/real" > /dev/null 2>&1; then
     echo -e "${GREEN}test $test_num reussis (with files)${NC}"
     section_passed=$((section_passed + 1))
 else
-    echo -e "${RED}test $test_num erreur${NC}"
-    echo -e "${RED}il y a une difference avec : ls $TEST_FILE1 $TEST_FILE2${NC}"
+    echo -e "${RED}test $test_num erreur (with files)${NC}"
+    echo -e "${RED}Difference:${NC}"
+    diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
     failed_tests=$((failed_tests + 1))
 fi
 test_num=$((test_num + 1))
@@ -222,8 +227,9 @@ if diff "$TMP_DIR/mine" "$TMP_DIR/real" > /dev/null 2>&1; then
     echo -e "${GREEN}test $test_num reussis (with non-existent file)${NC}"
     section_passed=$((section_passed + 1))
 else
-    echo -e "${RED}test $test_num erreur${NC}"
-    echo -e "${RED}il y a une difference avec : ls $NONEXISTENT_FILE${NC}"
+    echo -e "${RED}test $test_num erreur (with non-existent file)${NC}"
+    echo -e "${RED}Difference:${NC}"
+    diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
     failed_tests=$((failed_tests + 1))
 fi
 test_num=$((test_num + 1))
@@ -251,8 +257,9 @@ if diff "$TMP_DIR/mine" "$TMP_DIR/real" > /dev/null 2>&1; then
     echo -e "${GREEN}test $test_num reussis (with non-existent directory)${NC}"
     section_passed=$((section_passed + 1))
 else
-    echo -e "${RED}test $test_num erreur${NC}"
-    echo -e "${RED}il y a une difference avec : ls $NONEXISTENT_DIR${NC}"
+    echo -e "${RED}test $test_num erreur (with non-existent directory)${NC}"
+    echo -e "${RED}Difference:${NC}"
+    diff "$TMP_DIR/mine" "$TMP_DIR/real" || true
     failed_tests=$((failed_tests + 1))
 fi
 test_num=$((test_num + 1))
