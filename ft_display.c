@@ -68,10 +68,10 @@ static void		display_long_entry(const t_entry *entry, const char *path, int *wid
 	write(1, " ", 1);
 	get_user_info(entry->st.st_uid, &user_name);
 	display_string_padded(user_name, widths[1]);
-	write(1, "  ", 2);
+	write(1, " ", 1);
 	get_group_info(entry->st.st_gid, &group_name);
 	display_string_padded(group_name, widths[2]);
-	write(1, " ", 1);
+	write(1, "  ", 2);
 	display_number_padded((long long)entry->st.st_size, widths[3]);
 	write(1, " ", 1);
 	format_date(entry->st.st_mtime, date_buf);
