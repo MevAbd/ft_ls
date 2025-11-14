@@ -117,7 +117,8 @@ void			print_dirs_sections(char **dirs, int dir_count, int had_files,
 	{
 		if (printed_any_dir || had_files)
 			write(1, "\n", 1);
-		if (multi)
+		/* With -R, always show directory name with :, even for single directory */
+		if (multi || flags->R)
 		{
 			write(1, dirs[i], ft_strlen(dirs[i]));
 			write(1, ":\n", 2);
