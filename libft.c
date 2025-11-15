@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:37:48 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:38:01 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Calculate the length of a string */
 size_t			ft_strlen(const char *s)
 {
 	size_t		len;
@@ -11,7 +22,6 @@ size_t			ft_strlen(const char *s)
 	return (len);
 }
 
-/* Compare two strings (case-sensitive) */
 int				ft_strcmp(const char *s1, const char *s2)
 {
 	while (*s1 && *s1 == *s2)
@@ -22,7 +32,6 @@ int				ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-/* Duplicate a string */
 char			*ft_strdup(const char *s)
 {
 	size_t 		len;
@@ -43,7 +52,6 @@ char			*ft_strdup(const char *s)
 	return (dup);
 }
 
-/* Convert a number to string in a buffer */
 int				ft_putnbr(long long n, char *buf)
 {
 	int			len;

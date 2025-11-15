@@ -1,17 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_display.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:17:42 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:20:14 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <errno.h>
 #include <string.h>
 
-/* Display the target of a symbolic link */
 static void		display_symlink_target(const t_entry *entry, const char *path)
 {
 	char		*full;
 	char		link_target[256];
-	int			link_len;
+	int		link_len;
 
 	full = ft_build_full_path(path, entry->name);
 	if (!full)
-		return;
+		return ;
 	link_len = readlink(full, link_target, sizeof(link_target) - 1);
 	free(full);
 	if (link_len >= 0)
@@ -22,11 +33,10 @@ static void		display_symlink_target(const t_entry *entry, const char *path)
 	}
 }
 
-/* Display type and permissions */
 static void		display_type_and_perms(mode_t mode)
 {
-	char	type;
-	char	perms[10];
+	char		type;
+	char		perms[10];
 
 	get_file_type_char(mode, &type);
 	get_permissions(mode, perms);
@@ -35,10 +45,9 @@ static void		display_type_and_perms(mode_t mode)
 	write(1, " ", 1);
 }
 
-/* Display a number with padding */
 static void		display_number_padded(long long n, int max_width)
 {
-	char	buf[32];
+	char		buf[32];
 	int		len;
 
 	len = ft_putnbr(n, buf);
@@ -46,17 +55,15 @@ static void		display_number_padded(long long n, int max_width)
 	write(1, buf, len);
 }
 
-/* Display a string with padding */
 static void		display_string_padded(const char *str, int max_width)
 {
-	int	len;
+	int		len;
 
 	len = ft_strlen(str);
 	write(1, str, len);
 	write_padding(len, max_width);
 }
 
-/* Display a single line in long format (-l) */
 static void		display_long_entry(const t_entry *entry, const char *path, int *widths)
 {
 	char		date_buf[13];
@@ -83,11 +90,9 @@ static void		display_long_entry(const t_entry *entry, const char *path, int *wid
 	write(1, "\n", 1);
 }
 
-/* Display all entries in long format (-l) */
-static void		display_long_format(t_entry *entries, int count, t_flags *flags,
-				const char *path, int show_total)
+static void		display_long_format(t_entry *entries, int count, t_flags *flags, const char *path, int show_total)
 {
-	int 		i;
+	int			i;
 	int			widths[4];
 
 	if (show_total)
@@ -115,7 +120,6 @@ static void		display_long_format(t_entry *entries, int count, t_flags *flags,
 	}
 }
 
-/* Display all entries in simple format (without -l) */
 static void		display_simple_format(t_entry *entries, int count, int reverse)
 {
 	int 		i;

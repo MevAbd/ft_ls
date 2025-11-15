@@ -1,19 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_option.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:31:37 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:31:49 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Returns 1 if it's an option */
 int	is_option(const char *s)
 {
 	return (s && s[0] == '-' && s[1] != '\0'
 		&& !(s[1] == '-' && s[2] == '\0'));
 }
 
-/* Returns 1 if it's "--" (end of options marker) */
 int	is_end_of_options(const char *s)
 {
 	return (s && s[0] == '-' && s[1] == '-' && s[2] == '\0');
 }
 
-/* Check if a character is an allowed option */
 int	is_allowed_option(char c)
 {
 	return (c == 'l' || c == 'R' || c == 'a' || c == 'r' || c == 't');

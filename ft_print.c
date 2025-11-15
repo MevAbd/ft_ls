@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:32:57 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:34:07 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <errno.h>
 #include <string.h>
 
-/* Print an error message for an inaccessible file/directory */
 void			print_error(const char *path)
 {
 	const char 	*p1 = "ls: cannot access '";
@@ -16,7 +27,6 @@ void			print_error(const char *path)
 	write(2, "\n", 1);
 }
 
-/* Print an error message for an inaccessible directory */
 void			print_dir_error(const char *path)
 {
 	const char	*p1;
@@ -33,14 +43,12 @@ void			print_dir_error(const char *path)
 	write(2, "\n", 1);
 }
 
-/* Print an error message for a memory allocation failure */
 void			print_memory_error(void)
 {
 	const char 	*msg = "ls: memory allocation failed\n";
 	write(2, msg, ft_strlen(msg));
 }
 
-/* Print an error message for an invalid option */
 void			print_invalid_option(char c)
 {
 	const char	*p1;
@@ -53,7 +61,6 @@ void			print_invalid_option(char c)
 	write(2, p2, ft_strlen(p2));
 }
 
-/* Print all error messages for invalid operands */
 void			print_all_errors(char **error_paths, int error_count)
 {
 	int			i;
@@ -66,7 +73,6 @@ void			print_all_errors(char **error_paths, int error_count)
 	}
 }
 
-/* Display the "total X" line at the start of long format */
 void			print_total(t_entry *entries, int count)
 {
 	long long	total;
@@ -92,7 +98,6 @@ void			print_total(t_entry *entries, int count)
 	write(1, "\n", 1);
 }
 
-/* Display the files section (operands that are files) */
 void			print_files_section(t_entry *files, int file_count, t_flags *flags)
 {
 	if (file_count <= 0)
@@ -101,7 +106,6 @@ void			print_files_section(t_entry *files, int file_count, t_flags *flags)
 	display_entries(files, file_count, flags, ".", 0);
 }
 
-/* Display directory sections (operands that are directories) */
 void			print_dirs_sections(char **dirs, int dir_count, int had_files,
 	t_flags *flags)
 {
@@ -117,7 +121,6 @@ void			print_dirs_sections(char **dirs, int dir_count, int had_files,
 	{
 		if (printed_any_dir || had_files)
 			write(1, "\n", 1);
-		/* With -R, always show directory name with :, even for single directory */
 		if (multi || flags->R)
 		{
 			write(1, dirs[i], ft_strlen(dirs[i]));

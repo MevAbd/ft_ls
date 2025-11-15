@@ -1,8 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_parse.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:31:55 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:32:52 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-
-
-/* Set the flag corresponding to the option */
 static void		set_flag(char c, t_flags *flags)
 {
 	if (c == 'a')
@@ -19,7 +28,7 @@ static void		set_flag(char c, t_flags *flags)
 
 static void		parse_option_string(const char *opt_str, t_flags *flags)
 {
-	int			j;
+	int		j;
 
 	j = 1;
 	while (opt_str[j] != '\0')
@@ -34,17 +43,16 @@ static void		parse_option_string(const char *opt_str, t_flags *flags)
 	}
 }
 
-/* Parse all command line arguments */
 void			parse_args(int argc, char **argv, t_flags *flags)
 {
-	int			i;
+	int 		i;
 
+	i = 1;
 	flags->a = 0;
 	flags->r = 0;
 	flags->t = 0;
 	flags->l = 0;
 	flags->R = 0;
-	i = 1;
 	while (i < argc)
 	{
 		if (argv[i] && argv[i][0] == '-' && argv[i][1] == '-'

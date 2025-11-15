@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_entries.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:20:20 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:21:45 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <errno.h>
 #include <string.h>
 
-/* Build a full path from a base directory and a name */
 char			*ft_build_full_path(const char *base, const char *name)
 {
 	size_t		base_len;
@@ -36,7 +47,6 @@ char			*ft_build_full_path(const char *base, const char *name)
 	return (full);
 }
 
-/* Collect data for a single entry (file/directory) */
 static int		collect_single_entry(const char *path, const char *name, t_entry *entry)
 {
 	char		*full;
@@ -60,11 +70,10 @@ static int		collect_single_entry(const char *path, const char *name, t_entry *en
 }
 
 
-/* Count the number of files in a directory */
 int					count_files(const char *path, int show_hidden)
 {
 	DIR				*dir;
-	struct dirent	*entry;
+	struct dirent			*entry;
 	int				count;
 
 	count = 0;
@@ -83,12 +92,10 @@ int					count_files(const char *path, int show_hidden)
 	return (count);
 }
 
-/* Collect all entries from a directory */
-int					collect_entries(const char *path, t_entry *entries, int count,
-	int show_hidden)
+int					collect_entries(const char *path, t_entry *entries, int count, int show_hidden)
 {
 	DIR				*dir;
-	struct dirent	*entry;
+	struct dirent			*entry;
 	int				i;
 
 	dir = opendir(path);

@@ -13,11 +13,12 @@
 # include <pwd.h>
 # include <grp.h>
 
+
+
 // ============================================================================
 // STRUCTURES
 // ============================================================================
 
-// Structure for option flags
 typedef struct s_flags
 {
 	int a;  // -a : show all files (including hidden)
@@ -27,7 +28,6 @@ typedef struct s_flags
 	int R;  // -R : recursive (subdirectories)
 } t_flags;
 
-// Structure for an entry (file/directory)
 typedef struct s_entry
 {
 	char		*name;      // File/directory name
@@ -35,52 +35,48 @@ typedef struct s_entry
 	struct stat	st;         // Complete stat (for -l format)
 }	t_entry;
 
-// Structure for operands data (files and directories from command-line arguments)
 typedef struct s_operands_data
 {
 	t_entry		*file_entries;  // Array of file entries
-	int			file_count;    // Number of files
+	int		file_count;    // Number of files
 	char		**dir_paths;   // Array of directory paths
-	int			dir_count;     // Number of directories
-	int			had_error;     // Error flag
+	int		dir_count;     // Number of directories
+	int		had_error;     // Error flag
 }	t_operands_data;
 
 // ============================================================================
 // STRING MANIPULATION FUNCTIONS
 // ============================================================================
 size_t	ft_strlen(const char *s);
-int		ft_strcmp(const char *s1, const char *s2);
+int	ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s);
-int		ft_putnbr(long long n, char *buf);
+int	ft_putnbr(long long n, char *buf);
 
 // ============================================================================
 // PARSING AND ARGUMENT FUNCTIONS
 // ============================================================================
-int		is_option(const char *s);
-int		is_end_of_options(const char *s);
-int		is_allowed_option(char c);
+int	is_option(const char *s);
+int	is_end_of_options(const char *s);
+int	is_allowed_option(char c);
 void	parse_args(int argc, char **argv, t_flags *flags);
 
 // ============================================================================
 // FILE AND DIRECTORY MANAGEMENT FUNCTIONS
 // ============================================================================
 char	*ft_build_full_path(const char *base, const char *name);
-int		count_files(const char *path, int show_hidden);
-int		collect_entries(const char *path, t_entry *entries, int count,
-			int show_hidden);
+int	count_files(const char *path, int show_hidden);
+int	collect_entries(const char *path, t_entry *entries, int count, int show_hidden);
 void	sort_entries(t_entry *entries, int count, int use_time);
 void	sort_dir_paths(char **dirs, int dir_count);
-void	display_entries(t_entry *entries, int count, t_flags *flags,
-			const char *path, int show_total);
+void	display_entries(t_entry *entries, int count, t_flags *flags, const char *path, int show_total);
 void	list_files(const char *path, t_flags *flags);
-void	process_recursive_dirs(const char *path, t_entry *entries, int count,
-			t_flags *flags);
+void	process_recursive_dirs(const char *path, t_entry *entries, int count, t_flags *flags);
 
 // ============================================================================
 // OPERAND MANAGEMENT FUNCTIONS (files/directories in arguments)
 // ============================================================================
-int		count_operands(int argc, char **argv);
-int		handle_all_operands(int argc, char **argv, t_flags *flags);
+int	count_operands(int argc, char **argv);
+int	handle_all_operands(int argc, char **argv, t_flags *flags);
 void	classify_operands(int argc, char **argv, t_operands_data *data);
 
 // ============================================================================
@@ -93,8 +89,7 @@ void	print_invalid_option(char c);
 void	print_all_errors(char **error_paths, int error_count);
 void	print_total(t_entry *entries, int count);
 void	print_files_section(t_entry *files, int file_count, t_flags *flags);
-void	print_dirs_sections(char **dirs, int dir_count, int had_files,
-			t_flags *flags);
+void	print_dirs_sections(char **dirs, int dir_count, int had_files, t_flags *flags);
 
 // ============================================================================
 // FORMATTING FUNCTIONS
@@ -117,5 +112,18 @@ void	get_group_info(gid_t gid, const char **group_name);
 void	free_collected_entries(t_entry *entries, int count);
 void	free_entries(t_entry *entries, int count);
 void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count);
+
+#endif
+
+/* Cross-platform access to mtime (macOS / Linux) */
+#ifdef __APPLE__
+
+# define MTIME_SEC(st)  ((st).st_mtimespec.tv_sec)
+# define MTIME_NSEC(st) ((st).st_mtimespec.tv_nsec)
+
+#else
+
+# define MTIME_SEC(st)  ((st).st_mtim.tv_sec)
+# define MTIME_NSEC(st) ((st).st_mtim.tv_nsec)
 
 #endif

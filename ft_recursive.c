@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_recursive.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:34:16 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:34:45 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Process a single directory entry recursively */
-static void		process_single_dir(const char *path, const t_entry *entry,
-	t_flags *flags)
+static void		process_single_dir(const char *path, const t_entry *entry, t_flags *flags)
 {
 	char		*full_path;
 
@@ -22,11 +32,9 @@ static void		process_single_dir(const char *path, const t_entry *entry,
 	}
 }
 
-/* Process directories recursively (option -R) */
-void			process_recursive_dirs(const char *path, t_entry *entries, int count,
-	t_flags *flags)
+void	process_recursive_dirs(const char *path, t_entry *entries, int count, t_flags *flags)
 {
-	int		i;
+	int	i;
 
 	if (!flags->r)
 	{

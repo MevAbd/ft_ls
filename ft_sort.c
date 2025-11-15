@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_sort.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:34:50 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:37:06 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Sort an array of directory paths alphabetically */
 void		sort_dir_paths(char **dirs, int dir_count)
 {
 	int 	i;
@@ -24,17 +35,6 @@ void		sort_dir_paths(char **dirs, int dir_count)
 	}
 }
 
-
-/* Cross-platform access to mtime (macOS / Linux) */
-#ifdef __APPLE__
-# define MTIME_SEC(st)  ((st).st_mtimespec.tv_sec)
-# define MTIME_NSEC(st) ((st).st_mtimespec.tv_nsec)
-#else
-# define MTIME_SEC(st)  ((st).st_mtim.tv_sec)
-# define MTIME_NSEC(st) ((st).st_mtim.tv_nsec)
-#endif
-
-/* Compare two entries for sorting */
 static int compare_entries(const t_entry *a, const t_entry *b, int use_time)
 {
     long sec_diff;
@@ -55,29 +55,6 @@ static int compare_entries(const t_entry *a, const t_entry *b, int use_time)
     return ft_strcmp(a->name, b->name);
 }
 
-
-
-/*
-Compare two entries for sorting 
-static int	compare_entries(const t_entry *a, const t_entry *b, int use_time)
-{
-	long	sec_diff;
-	long	nsec_diff;
-
-	if (use_time)
-	{
-		sec_diff = (long)a->st.st_mtimespec.tv_sec - (long)b->st.st_mtimespec.tv_sec;
-		if (sec_diff != 0)
-			return (sec_diff > 0 ? -1 : 1);
-		nsec_diff = (long)a->st.st_mtimespec.tv_nsec - (long)b->st.st_mtimespec.tv_nsec;
-		if (nsec_diff != 0)
-			return (nsec_diff > 0 ? -1 : 1);
-		return (ft_strcmp(a->name, b->name));
-	}
-	return (ft_strcmp(a->name, b->name));
-}*/
-
-/* Sort an array of entries (bubble sort) */
 void		sort_entries(t_entry *entries, int count, int use_time)
 {
 	int		i;

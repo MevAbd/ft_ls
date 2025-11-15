@@ -1,12 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_operands.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:29:52 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:31:31 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <errno.h>
 #include <string.h>
 
-/* Add a path to the appropriate array (file or directory) */
-static int		add_operand_path(const char *path, t_operands_data *data,
-				struct stat *st)
+static int	add_operand_path(const char *path, t_operands_data *data, struct stat *st)
 {
-	char		*dup_path;
+	char	*dup_path;
 
 	dup_path = ft_strdup(path);
 	if (dup_path == NULL)
@@ -29,9 +39,7 @@ static int		add_operand_path(const char *path, t_operands_data *data,
 	return (1);
 }
 
-/* Check if a single path is a file or directory and add it to the appropriate array */
-static int		classify_single_operand(const char *path, t_operands_data *data,
-				char **error_paths, int *error_count)
+static int	classify_single_operand(const char *path, t_operands_data *data, char **error_paths, int *error_count)
 {
 	struct stat	st;
 
@@ -47,14 +55,11 @@ static int		classify_single_operand(const char *path, t_operands_data *data,
 	return (1);
 }
 
-
-
-/* Count the number of operands (arguments that are not options) */
-int				count_operands(int argc, char **argv)
+int	count_operands(int argc, char **argv)
 {
-	int			i;
-	int			count;
-	int			after_end_marker;
+	int	i;
+	int	count;
+	int	after_end_marker;
 
 	i = 1;
 	count = 0;
@@ -76,8 +81,7 @@ int				count_operands(int argc, char **argv)
 	return (count);
 }
 
-/* Allocate buffers for operands (files and directories) */
-static int		allocate_operands_buffers(t_operands_data *data, int argc)
+static int	allocate_operands_buffers(t_operands_data *data, int argc)
 {
 	data->file_entries = (t_entry *)malloc(sizeof(t_entry) * argc);
 	data->dir_paths = (char **)malloc(sizeof(char *) * argc);
@@ -93,8 +97,7 @@ static int		allocate_operands_buffers(t_operands_data *data, int argc)
 	return (0);
 }
 
-/* Handle all operands: classify, display, and free resources */
-int				handle_all_operands(int argc, char **argv, t_flags *flags)
+int	handle_all_operands(int argc, char **argv, t_flags *flags)
 {
 	t_operands_data	data;
 
@@ -107,13 +110,12 @@ int				handle_all_operands(int argc, char **argv, t_flags *flags)
 	return (data.had_error ? 1 : 0);
 }
 
-/* Parse all command-line arguments, ignore options, and classify each operand as file or directory */
-void			classify_operands(int argc, char **argv, t_operands_data *data)
+void	classify_operands(int argc, char **argv, t_operands_data *data)
 {
-	int			i;
-	int			after_end_marker;
-	char		**error_paths;
-	int			error_count;
+	int	i;
+	int	after_end_marker;
+	char	**error_paths;
+	int	error_count;
 
 	error_paths = (char **)malloc(sizeof(char *) * argc);
 	if (error_paths == NULL)

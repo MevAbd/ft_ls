@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:25:20 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:25:55 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Free collected entries on error */
 void	free_collected_entries(t_entry *entries, int count)
 {
 	int	i;
@@ -13,7 +24,6 @@ void	free_collected_entries(t_entry *entries, int count)
 	}
 }
 
-/* Free memory allocated for an array of entries */
 void	free_entries(t_entry *entries, int count)
 {
 	int	i;
@@ -27,10 +37,10 @@ void	free_entries(t_entry *entries, int count)
 	free(entries);
 }
 
-/* Free memory allocated for operands */
-void	free_operands(t_entry *files, int file_count, char **dirs, int dir_count)
+void	free_operands(t_entry *files, int file_count, char **dirs,
+	int dir_count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < file_count)

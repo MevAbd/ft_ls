@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_format.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:22:15 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:25:14 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Format month and day part of date */
-static int		format_month_day(struct tm *tm_info, char *date_buf, char *months[])
+static int	format_month_day(struct tm *tm_info, char *date_buf, char *months[])
 {
-	int			day;
-	int			month_idx;
+	int	day;
+	int	month_idx;
 
 	day = tm_info->tm_mday;
 	month_idx = tm_info->tm_mon;
@@ -18,12 +29,10 @@ static int		format_month_day(struct tm *tm_info, char *date_buf, char *months[])
 	return (7);
 }
 
-/* Format: "Dec 10 2023" */
-static void		format_date_with_year(struct tm *tm_info, char *date_buf,
-				char *months[])
+static void	format_date_with_year(struct tm *tm_info, char *date_buf, char *months[])
 {
-	int			year;
-	int			offset;
+	int	year;
+	int	offset;
 
 	offset = format_month_day(tm_info, date_buf, months);
 	year = tm_info->tm_year + 1900;
@@ -34,13 +43,11 @@ static void		format_date_with_year(struct tm *tm_info, char *date_buf,
 	date_buf[offset + 4] = '\0';
 }
 
-/* Format: "Nov 10 15:00" */
-static void		format_date_with_time(struct tm *tm_info, char *date_buf,
-				char *months[])
+static void	format_date_with_time(struct tm *tm_info, char *date_buf, char *months[])
 {
-	int			hour;
-	int			min;
-	int			offset;
+	int	hour;
+	int	min;
+	int	offset;
 
 	offset = format_month_day(tm_info, date_buf, months);
 	hour = tm_info->tm_hour;
@@ -53,8 +60,7 @@ static void		format_date_with_time(struct tm *tm_info, char *date_buf,
 	date_buf[offset + 5] = '\0';
 }
 
-/* Format a modification date */
-void			format_date(time_t mtime, char *date_buf)
+void		format_date(time_t mtime, char *date_buf)
 {
 	time_t 		now;
 	struct tm 	*tm_info;

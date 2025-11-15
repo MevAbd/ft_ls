@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:38:24 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:38:26 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 #include <errno.h>
 #include <string.h>
 
-/* Counts files, collects entries, sorts, displays, and handles recursion if -R */
 void		list_files(const char *path, t_flags *flags)
 {
 	t_entry	*entries;

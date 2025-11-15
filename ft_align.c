@@ -1,18 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_align.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: malbrand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/15 11:07:41 by malbrand          #+#    #+#             */
+/*   Updated: 2025/11/15 11:17:04 by malbrand         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ls.h"
 
-/* Calculate maximum widths for each column in long format */
-void		calculate_column_widths(t_entry *entries, int count, int *widths)
+void	calculate_column_widths(t_entry *entries, int count, int *widths)
 {
-	int			i;
+	int		i;
+	int		len;
 	char		buf[32];
-	int			len;
 	const char	*user_name;
 	const char	*group_name;
 
-	widths[0] = 0; /* nlink */
-	widths[1] = 0; /* user */
-	widths[2] = 0; /* group */
-	widths[3] = 0; /* size */
+	widths[0] = 0;
+	widths[1] = 0;
+	widths[2] = 0;
+	widths[3] = 0;
 	i = 0;
 	while (i < count)
 	{
@@ -34,8 +45,7 @@ void		calculate_column_widths(t_entry *entries, int count, int *widths)
 	}
 }
 
-/* Write padding spaces to align columns */
-void		write_padding(int current_len, int max_width)
+void	write_padding(int current_len, int max_width)
 {
 	int		i;
 
